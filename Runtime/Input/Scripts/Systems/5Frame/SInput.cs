@@ -9,12 +9,10 @@ namespace GBB.Input
         readonly EcsWorldInject world = default;
 
 
-        readonly EcsFilterInject<Inc<RMousePositionChange>> mousePositionChangeRFilter = default;
-        readonly EcsPoolInject<RMousePositionChange> mousePositionChangeRPool = default;
 
-        readonly EcsPoolInject<RMouseMapPositionCheck> mouseMapPositionCheckRPool = default;
+        readonly EcsPoolInject<R_MouseMapPositionCheck> mouseMapPositionCheckRPool = default;
 
-        readonly EcsPoolInject<RMouseMapClickCheck> mouseMapClickCheckRPool = default;
+        readonly EcsPoolInject<R_MouseMapClickCheck> mouseMapClickCheckRPool = default;
 
 
         readonly EcsCustomInject<InputData> inputData = default;
@@ -25,13 +23,15 @@ namespace GBB.Input
             MousePositionChangeRequests();
         }
 
+        readonly EcsFilterInject<Inc<R_MousePositionChange>> mousePositionChangeRFilter = default;
+        readonly EcsPoolInject<R_MousePositionChange> mousePositionChangeRPool = default;
         void MousePositionChangeRequests()
         {
             //Для каждого запроса изменения положения курсора
             foreach (int requestEntity in mousePositionChangeRFilter.Value)
             {
                 //Берём запрос
-                ref RMousePositionChange requestComp = ref mousePositionChangeRPool.Value.Get(requestEntity);
+                ref R_MousePositionChange requestComp = ref mousePositionChangeRPool.Value.Get(requestEntity);
 
                 //Обновляем положение курсора мыши
                 MousePositionChangeRequest(ref requestComp);
@@ -64,7 +64,7 @@ namespace GBB.Input
         }
 
         void MousePositionChangeRequest(
-            ref RMousePositionChange requestComp)
+            ref R_MousePositionChange requestComp)
         {
             //Переносим данные из запроса
             inputData.Value.isMouseOverMap = requestComp.isMouseOverMap;

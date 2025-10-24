@@ -21,12 +21,12 @@ namespace GBB.Input
 
         public static void MouseMapPositionCheckRequest(
             EcsWorld world,
-            EcsPool<RMouseMapPositionCheck> requestPool,
+            EcsPool<R_MouseMapPositionCheck> requestPool,
             EcsPackedEntity currentProvincePE)
         {
             //Создаём новую сущность и назначаем ей запрос
             int requestEntity = world.NewEntity();
-            ref RMouseMapPositionCheck requestComp = ref requestPool.Add(requestEntity);
+            ref R_MouseMapPositionCheck requestComp = ref requestPool.Add(requestEntity);
 
             //Заполняем данные запроса
             requestComp = new(
@@ -35,13 +35,13 @@ namespace GBB.Input
 
         public static void MouseMapClickCheckRequest(
             EcsWorld world,
-            EcsPool<RMouseMapClickCheck> requestPool,
+            EcsPool<R_MouseMapClickCheck> requestPool,
             EcsPackedEntity currentProvincePE,
             bool leftMouseButtonClick, bool rightMouseButtonClick)
         {
             //Создаём новую сущность и назначаем ей запрос
             int requestEntity = world.NewEntity();
-            ref RMouseMapClickCheck requestComp = ref requestPool.Add(requestEntity);
+            ref R_MouseMapClickCheck requestComp = ref requestPool.Add(requestEntity);
 
             //Заполняем данные запроса
             requestComp = new(

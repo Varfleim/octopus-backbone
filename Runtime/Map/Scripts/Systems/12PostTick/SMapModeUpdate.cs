@@ -12,8 +12,8 @@ namespace GBB.Map
             MapModeActiveUpdate();
         }
 
-        readonly EcsFilterInject<Inc<CMapModeCore, CActiveMapMode>> activeMapModeFilter = default;
-        readonly EcsPoolInject<SRMapModeUpdate> mapModeUpdateSRPool = default;
+        readonly EcsFilterInject<Inc<C_MapModeCore, CT_ActiveMapMode>> activeMapModeFilter = default;
+        readonly EcsPoolInject<SR_MapModeUpdate> mapModeUpdateSRPool = default;
         void MapModeActiveUpdate()
         {
             //Для каждого активного режима карты

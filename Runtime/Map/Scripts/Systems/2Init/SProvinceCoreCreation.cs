@@ -11,10 +11,10 @@ namespace GBB.Map
         readonly EcsWorldInject world = default;
 
 
-        readonly EcsFilterInject<Inc<CMap>> mapFilter = default;
-        readonly EcsPoolInject<CMap> mapPool = default;
+        readonly EcsFilterInject<Inc<C_Map>> mapFilter = default;
+        readonly EcsPoolInject<C_Map> mapPool = default;
 
-        readonly EcsPoolInject<CProvinceCore> pCPool = default;
+        readonly EcsPoolInject<C_ProvinceCore> pCPool = default;
 
         public void Init(IEcsSystems systems)
         {
@@ -22,8 +22,8 @@ namespace GBB.Map
             ProvincesCoreCreation();
         }
 
-        readonly EcsFilterInject<Inc<SRProvinceCoreCreation>> pCCreationSRFilter = default;
-        readonly EcsPoolInject<SRProvinceCoreCreation> pCCreationSRPool = default;
+        readonly EcsFilterInject<Inc<SR_ProvinceCoreCreation>> pCCreationSRFilter = default;
+        readonly EcsPoolInject<SR_ProvinceCoreCreation> pCCreationSRPool = default;
         void ProvincesCoreCreation()
         {
             //Создаём временный список провинций
@@ -33,7 +33,7 @@ namespace GBB.Map
             foreach(int mapEntity in mapFilter.Value)
             {
                 //Берём карту
-                ref CMap map = ref mapPool.Value.Get(mapEntity);
+                ref C_Map map = ref mapPool.Value.Get(mapEntity);
 
                 //Очищаем временный список провинций
                 tempProvinces.Clear();
@@ -42,7 +42,7 @@ namespace GBB.Map
                 foreach (int provinceEntity in pCCreationSRFilter.Value)
                 {
                     //Берём запрос
-                    ref SRProvinceCoreCreation requestComp = ref pCCreationSRPool.Value.Get(provinceEntity);
+                    ref SR_ProvinceCoreCreation requestComp = ref pCCreationSRPool.Value.Get(provinceEntity);
 
                     //Если провинция принадлежит текущей карте
                     if(requestComp.parentMapPE.EqualsTo(map.selfPE))
@@ -53,7 +53,7 @@ namespace GBB.Map
                             ref requestComp);
 
                         //Берём PC
-                        ref CProvinceCore pC = ref pCPool.Value.Get(provinceEntity);
+                        ref C_ProvinceCore pC = ref pCPool.Value.Get(provinceEntity);
 
                         //Заносим провинцию в список
                         tempProvinces.Add(pC.selfPE);
@@ -70,10 +70,10 @@ namespace GBB.Map
 
         void ProvinceCoreCreation(
             int provinceEntity,
-            ref SRProvinceCoreCreation requestComp)
+            ref SR_ProvinceCoreCreation requestComp)
         {
             //Назначаем сущности провинции компонент PC
-            ref CProvinceCore pC = ref pCPool.Value.Add(provinceEntity);
+            ref C_ProvinceCore pC = ref pCPool.Value.Add(provinceEntity);
 
             //Заполняем основные данные PC
             pC = new(

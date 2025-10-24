@@ -9,16 +9,24 @@ namespace GBB.Map
 {
     public class ProvinceData : MonoBehaviour
     {
-        public float mapPanelAltitude;
+        [SerializeField]
+        private float mapPanelAltitude;
+
+        [SerializeField]
+        private GO_Province provinceGOPrefab;
+        [SerializeField]
+        private GO_ProvinceHighlight provinceHighlightGOPrefab;
+        [SerializeField]
+        private UnityEngine.UI.VerticalLayoutGroup provinceMapPanelGroupPrefab;
 
         public static void ProvinceCoreCreationRequest(
-            EcsPool<SRProvinceCoreCreation> requestPool,
+            EcsPool<SR_ProvinceCoreCreation> requestPool,
             int provinceEntity,
             EcsPackedEntity parentMapPE,
             List<EcsPackedEntity> neighbours)
         {
             //Назначаем сущности запрос
-            ref SRProvinceCoreCreation requestComp = ref requestPool.Add(provinceEntity);
+            ref SR_ProvinceCoreCreation requestComp = ref requestPool.Add(provinceEntity);
 
             //Заполняем данные запроса
             requestComp = new(
@@ -28,13 +36,13 @@ namespace GBB.Map
 
         public static void ProvinceCoreCreation(
             EcsWorld world,
-            ref SRProvinceCoreCreation requestComp,
+            ref SR_ProvinceCoreCreation requestComp,
             int provinceEntity,
-            EcsPool<CProvinceCore> pCPool,
+            EcsPool<C_ProvinceCore> pCPool,
             List<EcsPackedEntity> mapProvincesList)
         {
             //Назначаем сущности компонент PC
-            ref CProvinceCore pC = ref pCPool.Add(provinceEntity);
+            ref C_ProvinceCore pC = ref pCPool.Add(provinceEntity);
 
             //Заполняем основные данные PC
             pC = new(
@@ -47,13 +55,13 @@ namespace GBB.Map
 
         public static void ProvinceMapPanelSetParentRequest(
             EcsWorld world,
-            EcsPool<RProvinceMapPanelSetParent> requestPool,
+            EcsPool<R_ProvinceMapPanelSetParent> requestPool,
             EcsPackedEntity parentProvincePE,
             GameObject mapPanelGO)
         {
             //Создаём новую сущность и назначаем ей запрос
             int requestEntity = world.NewEntity();
-            ref RProvinceMapPanelSetParent requestComp = ref requestPool.Add(requestEntity);
+            ref R_ProvinceMapPanelSetParent requestComp = ref requestPool.Add(requestEntity);
 
             //Заполняем данные запроса
             requestComp = new(

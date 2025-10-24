@@ -3,9 +3,11 @@ using UnityEngine;
 
 namespace GBB.Input
 {
-    [CreateAssetMenu]
-    public class InputModule : GameModule
+    internal class InputModule : GameSubmodule
     {
+        [SerializeField]
+        private InputData inputData;
+
         public override void AddSystems(GameStartup startup)
         {
             //Добавляем системы инициализации
@@ -32,9 +34,6 @@ namespace GBB.Input
 
         public override void InjectData(GameStartup startup)
         {
-            //Создаём объект для данных ввода и назначаем ему их компонент
-            InputData inputData = startup.AddDataObject().AddComponent<InputData>();
-
             //Вводим данные
             startup.InjectData(inputData);
         }

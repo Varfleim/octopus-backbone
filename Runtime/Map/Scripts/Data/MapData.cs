@@ -9,12 +9,12 @@ namespace GBB.Map
     {
         public static void MapActivationRequest(
             EcsWorld world,
-            EcsPool<RMapActivation> requestPool,
+            EcsPool<R_MapActivation> requestPool,
             EcsPackedEntity mapPE)
         {
             //Создаём новую сущность и назначаем ей запрос
             int requestEntity = world.NewEntity();
-            ref RMapActivation requestComp = ref requestPool.Add(requestEntity);
+            ref R_MapActivation requestComp = ref requestPool.Add(requestEntity);
 
             //Заполняем данные запроса
             requestComp = new(
@@ -23,11 +23,11 @@ namespace GBB.Map
 
         public static void MapRenderInitializationRequest(
             EcsWorld world,
-            EcsPool<RMapRenderInitialization> requestPool)
+            EcsPool<R_MapRenderInitialization> requestPool)
         {
             //Создаём новую сущность и назначаем ей запрос
             int requestEntity = world.NewEntity();
-            ref RMapRenderInitialization requestComp = ref requestPool.Add(requestEntity);
+            ref R_MapRenderInitialization requestComp = ref requestPool.Add(requestEntity);
 
             //Заполняем данные запроса
             requestComp = new(0);
@@ -35,12 +35,12 @@ namespace GBB.Map
 
         public static void MapEdgesUpdateRequest(
             EcsWorld world,
-            EcsPool<RMapEdgesUpdate> requestPool,
+            EcsPool<R_MapEdgesUpdate> requestPool,
             bool isThinUpdated, bool isThickUpdated)
         {
             //Создаём новую сущность и назначаем ей запрос
             int requestEntity = world.NewEntity();
-            ref RMapEdgesUpdate requestComp = ref requestPool.Add(requestEntity);
+            ref R_MapEdgesUpdate requestComp = ref requestPool.Add(requestEntity);
 
             //Заполняем данные запроса
             requestComp = new(
@@ -49,12 +49,12 @@ namespace GBB.Map
 
         public static void MapProvincesUpdateRequest(
             EcsWorld world,
-            EcsPool<RMapProvincesUpdate> requestPool,
+            EcsPool<R_MapProvincesUpdate> requestPool,
             bool isMaterialUpdated, bool isHeightUpdated, bool isColorUpdated)
         {
             //Создаём новую сущность и назначаем ей запрос
             int requestEntity = world.NewEntity();
-            ref RMapProvincesUpdate requestComp = ref requestPool.Add(requestEntity);
+            ref R_MapProvincesUpdate requestComp = ref requestPool.Add(requestEntity);
 
             //Заполняем данные запроса
             requestComp = new(

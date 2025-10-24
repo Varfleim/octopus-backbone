@@ -1,0 +1,18 @@
+
+namespace GBB.Map
+{
+    public readonly struct R_MapEdgesUpdate
+    {
+        public R_MapEdgesUpdate(
+            bool isThinUpdated, bool isThickUpdated, bool isCurrentHighlightUpdated)
+        {
+            this.isThinUpdated = isThinUpdated;
+            this.isThickUpdated = isThickUpdated;
+            this.isCurrentHighlightUpdated = isCurrentHighlightUpdated;
+        }
+
+        public readonly bool isThinUpdated;
+        public readonly bool isThickUpdated;
+        public readonly bool isCurrentHighlightUpdated;
+    }
+}

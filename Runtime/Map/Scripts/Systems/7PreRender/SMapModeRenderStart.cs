@@ -18,15 +18,15 @@ namespace GBB.Map
             MapModesRenderSystemsActivation();
         }
 
-        readonly EcsFilterInject<Inc<CMapModeCore, SRMapModeUpdate>> mapModeUpdateSRFilter = default;
-        readonly EcsPoolInject<CMapModeCore> mapModeCorePool = default;
+        readonly EcsFilterInject<Inc<C_MapModeCore, SR_MapModeUpdate>> mapModeUpdateSRFilter = default;
+        readonly EcsPoolInject<C_MapModeCore> mapModeCorePool = default;
         void MapModesRenderSystemsActivation()
         {
             //Для каждого режима карты с запросом обновления
             foreach (int mapModeEntity in mapModeUpdateSRFilter.Value)
             {
                 //Берём режим карты
-                ref CMapModeCore mapMode = ref mapModeCorePool.Value.Get(mapModeEntity);
+                ref C_MapModeCore mapMode = ref mapModeCorePool.Value.Get(mapModeEntity);
 
                 //Создаём новую сущность и назначаем ей запрос переключения группы систем
                 int requestEntity = world.Value.NewEntity();

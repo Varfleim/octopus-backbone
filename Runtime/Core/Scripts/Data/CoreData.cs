@@ -11,13 +11,13 @@ namespace GBB.Core
 
         public static void ObjectCreatedEvent(
             EcsWorld world,
-            EcsPool<EObjectCreated> eventPool,
+            EcsPool<E_ObjectCreated> eventPool,
             int objectTypeIndex,
             EcsPackedEntity objectPE)
         {
             //Создаём новую сущность и назначаем ей компонент события
             int eventEntity = world.NewEntity();
-            ref EObjectCreated eventComp = ref eventPool.Add(eventEntity);
+            ref E_ObjectCreated eventComp = ref eventPool.Add(eventEntity);
 
             //Заполняем данные события
             eventComp = new(

@@ -8,6 +8,7 @@ namespace GBB.Map
     {
         readonly EcsWorldInject world = default;
 
+
         readonly EcsCustomInject<MapModeData> mapModeData = default;
 
         public void Init(IEcsSystems systems)
@@ -16,43 +17,45 @@ namespace GBB.Map
             MapModesCreation();
         }
 
-        readonly EcsFilterInject<Inc<SRMapModeCreation>> mapModeCreationSRFilter = default;
-        readonly EcsPoolInject<SRMapModeCreation> mapModeCreationSRPool = default;
+        readonly EcsFilterInject<Inc<SR_MapModeCreation>> mapModeCreationSRFilter = default;
+        readonly EcsPoolInject<SR_MapModeCreation> mapModeCreationSRPool = default;
         void MapModesCreation()
         {
             //Для каждого запроса создания режима карты
             foreach(int mapModeEntity in mapModeCreationSRFilter.Value)
             {
                 //Берём запрос
-                ref SRMapModeCreation requestComp = ref mapModeCreationSRPool.Value.Get(mapModeEntity);
+                ref SR_MapModeCreation requestComp = ref mapModeCreationSRPool.Value.Get(mapModeEntity);
 
-                //Создаём режим карты по запросу
+                //Создаём режим карты
                 MapModeCreation(
                     mapModeEntity,
                     ref requestComp);
 
+                //ТЕСТ
                 //Берём режим карты
-                ref CMapModeCore mapMode = ref mapModeCorePool.Value.Get(mapModeEntity);
+                ref C_MapModeCore mapMode = ref mapModeCorePool.Value.Get(mapModeEntity);
 
                 //Если данный режим карты указан как стандартный
                 if(requestComp.defaultMapMode == true)
                 {
                     //Сохраняем его как стандартный режим карты
-                    mapModeData.Value.defaultMapModePE = mapMode.selfPE;
+                    mapModeData.Value.defaultMapModePE = world.Value.PackEntity(mapModeEntity);
                 }
+                //ТЕСТ
 
                 //Удаляем запрос
                 mapModeCreationSRPool.Value.Del(mapModeEntity);
             }
         }
 
-        readonly EcsPoolInject<CMapModeCore> mapModeCorePool = default;
+        readonly EcsPoolInject<C_MapModeCore> mapModeCorePool = default;
         void MapModeCreation(
             int mapModeEntity,
-            ref SRMapModeCreation requestComp)
+            ref SR_MapModeCreation requestComp)
         {
             //Назначаем сущности режима карты компонент режима карты
-            ref CMapModeCore mapMode = ref mapModeCorePool.Value.Add(mapModeEntity);
+            ref C_MapModeCore mapMode = ref mapModeCorePool.Value.Add(mapModeEntity);
 
             //Заполняем основные данные режима
             mapMode = new(

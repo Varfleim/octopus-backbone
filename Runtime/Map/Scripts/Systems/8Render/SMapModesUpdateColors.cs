@@ -9,10 +9,10 @@ namespace GBB.Map
         readonly EcsWorldInject world = default;
 
 
-        readonly EcsPoolInject<CMapModeCore> mapModeCorePool = default;
+        readonly EcsPoolInject<C_MapModeCore> mapModeCorePool = default;
 
-        readonly EcsFilterInject<Inc<RMapModeUpdateColorsListSecond>> mapModeUpdateColorsListSecondRFilter = default;
-        readonly EcsPoolInject<RMapModeUpdateColorsListSecond> mapModeUpdateColorsListSecondRPool = default;
+        readonly EcsFilterInject<Inc<R_MapModeUpdateColorsListSecond>> mapModeUpdateColorsListSecondRFilter = default;
+        readonly EcsPoolInject<R_MapModeUpdateColorsListSecond> mapModeUpdateColorsListSecondRPool = default;
 
         public void Run(IEcsSystems systems)
         {
@@ -26,15 +26,10 @@ namespace GBB.Map
             foreach (int requestEntity in mapModeUpdateColorsListSecondRFilter.Value)
             {
                 //Берём запрос
-                ref RMapModeUpdateColorsListSecond requestComp = ref mapModeUpdateColorsListSecondRPool.Value.Get(requestEntity);
-
-                //Берём режим карты
-                requestComp.mapModePE.Unpack(world.Value, out int mapModeEntity);
-                ref CMapModeCore mapMode = ref mapModeCorePool.Value.Get(mapModeEntity);
+                ref R_MapModeUpdateColorsListSecond requestComp = ref mapModeUpdateColorsListSecondRPool.Value.Get(requestEntity);
 
                 //Обновляем список цветов
                 MapModeUpdateColorsList(
-                    ref mapMode,
                     ref requestComp);
 
                 //Удаляем запрос
@@ -43,9 +38,12 @@ namespace GBB.Map
         }
 
         void MapModeUpdateColorsList(
-            ref CMapModeCore mapMode,
-            ref RMapModeUpdateColorsListSecond requestComp)
+            ref R_MapModeUpdateColorsListSecond requestComp)
         {
+            //Берём режим карты
+            requestComp.mapModePE.Unpack(world.Value, out int mapModeEntity);
+            ref C_MapModeCore mapMode = ref mapModeCorePool.Value.Get(mapModeEntity);
+
             //Очищаем список цветов режима карты
             mapMode.colors.Clear();
 

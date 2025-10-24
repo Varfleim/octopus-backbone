@@ -86,14 +86,14 @@ namespace GBB
             for (int a = 0; a < modules.Count; a++)
             {
                 //Добавляем системы
-                modules[a].AddSystems(this);
+                modules[a].AddSubmodulesSystems(this);
             }
 
             //Для каждого модуля вводим данные
             for (int a = 0; a < modules.Count; a++)
             {
                 //Вводим данные
-                modules[a].InjectData(this);
+                modules[a].InjectSubmodulesData(this);
             }
 
             //Вводим данные

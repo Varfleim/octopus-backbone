@@ -9,45 +9,20 @@ namespace GBB.Map
         readonly EcsWorldInject world = default;
 
 
-        readonly EcsFilterInject<Inc<CMapModeCore, CActiveMapMode, SRMapModeUpdate>> activeMapModeFilter = default;
-        readonly EcsPoolInject<CMapModeCore> mapModePool = default;
+        readonly EcsPoolInject<C_ProvinceRender> pRPool = default;
 
-        readonly EcsPoolInject<CProvinceRender> pRPool = default;
-        readonly EcsFilterInject<Inc<CProvinceRender, SRUpdateThinEdges>> provinceUpdateThinEdgesSRFilter = default;
-        readonly EcsFilterInject<Inc<CProvinceRender>, Exc<SRUpdateThinEdges>> provinceWithoutUpdateThinEdgesSRFilter = default;
-        readonly EcsPoolInject<SRUpdateThinEdges> updateThinEdgesSRPool = default;
-        readonly EcsFilterInject<Inc<CProvinceRender, SRUpdateThickEdges>> provinceUpdateThickEdgesSRFilter = default;
-        readonly EcsFilterInject<Inc<CProvinceRender>, Exc<SRUpdateThickEdges>> provinceWithoutUpdateThickEdgesSRFilter = default;
-        readonly EcsPoolInject<SRUpdateThickEdges> updateThickEdgesSRPool = default;
-
-        readonly EcsPoolInject<RMapEdgesUpdate> mapEdgesUpdateRPool = default;
-        readonly EcsPoolInject<RMapProvincesUpdate> mapProvincesUpdateRPool = default;
+        readonly EcsPoolInject<R_MapProvincesUpdate> mapProvincesUpdateRPool = default;
         
         public void Run(IEcsSystems systems)
         {
             //Обновляем данные граней
             MapEdgesDataUpdate();
 
-            //Для каждого активного режима карты с запросом обновления
-            foreach(int activeMapModeEntity in activeMapModeFilter.Value)
-            {
-                //Берём режим карты
-                ref CMapModeCore activeMapMode = ref mapModePool.Value.Get(activeMapModeEntity);
-
-                //Обновляем данные визуализации провинций
-                MapProvinceRenderDataUpdate(
-                    ref activeMapMode,
-                    out bool isHeightUpdated,
-                    out bool isColorUpdated);
-
-                //Запрашиваем обновление визуализации провинций карты
-                MapData.MapProvincesUpdateRequest(
-                    world.Value,
-                    mapProvincesUpdateRPool.Value,
-                    false, isHeightUpdated, isColorUpdated);
-            }
+            //Обновляем данные режимов карты
+            MapModesDataUpdate();
         }
 
+        readonly EcsPoolInject<R_MapEdgesUpdate> mapEdgesUpdateRPool = default;
         void MapEdgesDataUpdate()
         {
             //Проверяем, какие грани требуется обновить
@@ -80,6 +55,9 @@ namespace GBB.Map
             }
         }
 
+        readonly EcsFilterInject<Inc<C_ProvinceRender, SR_UpdateThinEdges>> provinceUpdateThinEdgesSRFilter = default;
+        readonly EcsFilterInject<Inc<C_ProvinceRender>, Exc<SR_UpdateThinEdges>> provinceWithoutUpdateThinEdgesSRFilter = default;
+        readonly EcsPoolInject<SR_UpdateThinEdges> updateThinEdgesSRPool = default;
         void MapThinEdgesDataUpdate(
             out bool isThinUpdated)
         {
@@ -90,7 +68,7 @@ namespace GBB.Map
             foreach (int provinceEntity in provinceWithoutUpdateThinEdgesSRFilter.Value)
             {
                 //Берём провинцию
-                ref CProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
+                ref C_ProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
 
                 //Если индекс тонких граней был обновлён
                 if(MapModeData.UpdateProvinceThinEdgesIndex(
@@ -113,8 +91,8 @@ namespace GBB.Map
             foreach (int provinceEntity in provinceUpdateThinEdgesSRFilter.Value)
             {
                 //Берём провинцию и запрос
-                ref CProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
-                ref SRUpdateThinEdges requestComp = ref updateThinEdgesSRPool.Value.Get(provinceEntity);
+                ref C_ProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
+                ref SR_UpdateThinEdges requestComp = ref updateThinEdgesSRPool.Value.Get(provinceEntity);
 
                 //Если индекс тонких граней был обновлён
                 if (MapModeData.UpdateProvinceThinEdgesIndex(
@@ -130,6 +108,9 @@ namespace GBB.Map
             }
         }
 
+        readonly EcsFilterInject<Inc<C_ProvinceRender, SR_UpdateThickEdges>> provinceUpdateThickEdgesSRFilter = default;
+        readonly EcsFilterInject<Inc<C_ProvinceRender>, Exc<SR_UpdateThickEdges>> provinceWithoutUpdateThickEdgesSRFilter = default;
+        readonly EcsPoolInject<SR_UpdateThickEdges> updateThickEdgesSRPool = default;
         void MapThickEdgesDataUpdate(
             out bool isThickUpdated)
         {
@@ -140,7 +121,7 @@ namespace GBB.Map
             foreach (int provinceEntity in provinceWithoutUpdateThickEdgesSRFilter.Value)
             {
                 //Берём провинцию
-                ref CProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
+                ref C_ProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
 
                 //Если индекс толстых граней был обновлён
                 if (MapModeData.UpdateProvinceThickEdgesIndex(
@@ -163,8 +144,8 @@ namespace GBB.Map
             foreach (int provinceEntity in provinceUpdateThickEdgesSRFilter.Value)
             {
                 //Берём провинцию и запрос
-                ref CProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
-                ref SRUpdateThickEdges requestComp = ref updateThickEdgesSRPool.Value.Get(provinceEntity);
+                ref C_ProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
+                ref SR_UpdateThickEdges requestComp = ref updateThickEdgesSRPool.Value.Get(provinceEntity);
 
                 //Если индекс толстых граней был обновлён
                 if (MapModeData.UpdateProvinceThickEdgesIndex(
@@ -180,11 +161,35 @@ namespace GBB.Map
             }
         }
 
-        readonly EcsFilterInject<Inc<CProvinceRender, SRUpdateProvinceRender>> provinceUpdateProvinceRenderSRFilter = default;
-        readonly EcsFilterInject<Inc<CProvinceRender>, Exc<SRUpdateProvinceRender>> provinceWithoutUpdateProvinceRenderSRFilter = default;
-        readonly EcsPoolInject<SRUpdateProvinceRender> updateProvinceRenderSRPool = default;
+        readonly EcsFilterInject<Inc<C_MapModeCore, CT_ActiveMapMode, SR_MapModeUpdate>> activeMapModeFilter = default;
+        readonly EcsPoolInject<C_MapModeCore> mapModePool = default;
+        void MapModesDataUpdate()
+        {
+            //Для каждого активного режима карты с запросом обновления
+            foreach (int activeMapModeEntity in activeMapModeFilter.Value)
+            {
+                //Берём режим карты
+                ref C_MapModeCore activeMapMode = ref mapModePool.Value.Get(activeMapModeEntity);
+
+                //Обновляем данные визуализации провинций
+                MapProvinceRenderDataUpdate(
+                    ref activeMapMode,
+                    out bool isHeightUpdated,
+                    out bool isColorUpdated);
+
+                //Запрашиваем обновление визуализации провинций карты
+                MapData.MapProvincesUpdateRequest(
+                    world.Value,
+                    mapProvincesUpdateRPool.Value,
+                    false, isHeightUpdated, isColorUpdated);
+            }
+        }
+
+        readonly EcsFilterInject<Inc<C_ProvinceRender, SR_UpdateProvinceRender>> provinceUpdateProvinceRenderSRFilter = default;
+        readonly EcsFilterInject<Inc<C_ProvinceRender>, Exc<SR_UpdateProvinceRender>> provinceWithoutUpdateProvinceRenderSRFilter = default;
+        readonly EcsPoolInject<SR_UpdateProvinceRender> updateProvinceRenderSRPool = default;
         void MapProvinceRenderDataUpdate(
-            ref CMapModeCore mapMode,
+            ref C_MapModeCore mapMode,
             out bool isHeightUpdated, out bool isColorUpdated)
         {
             //Устанавливаем значения по умолчанию
@@ -195,7 +200,7 @@ namespace GBB.Map
             foreach (int provinceEntity in provinceWithoutUpdateProvinceRenderSRFilter.Value)
             {
                 //Берём провинцию
-                ref CProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
+                ref C_ProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
 
                 //Обновляем отображаемый объект провинции
                 MapModeData.UpdateProvinceDisplayedObject(
@@ -237,8 +242,8 @@ namespace GBB.Map
             foreach (int provinceEntity in provinceUpdateProvinceRenderSRFilter.Value)
             {
                 //Берём провинцию и запрос
-                ref CProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
-                ref SRUpdateProvinceRender requestComp = ref updateProvinceRenderSRPool.Value.Get(provinceEntity);
+                ref C_ProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
+                ref SR_UpdateProvinceRender requestComp = ref updateProvinceRenderSRPool.Value.Get(provinceEntity);
 
                 //Обновляем отображаемый объект провинции
                 MapModeData.UpdateProvinceDisplayedObject(

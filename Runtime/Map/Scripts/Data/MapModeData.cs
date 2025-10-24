@@ -14,12 +14,12 @@ namespace GBB.Map
         public EcsPackedEntity activeMapModePE;
 
         public static void MapModeCreationRequest(
-            EcsPool<SRMapModeCreation> requestPool,
+            EcsPool<SR_MapModeCreation> requestPool,
             int mapModeEntity, string mapModeName,
             bool defaultMapMode)
         {
             //Назначаем сущности запрос создания режима карты
-            ref SRMapModeCreation requestComp = ref requestPool.Add(mapModeEntity);
+            ref SR_MapModeCreation requestComp = ref requestPool.Add(mapModeEntity);
 
             //Заполняем данные запроса
             requestComp = new(
@@ -29,13 +29,13 @@ namespace GBB.Map
 
         public static void MapModeUpdateColorsListFirstRequest(
             EcsWorld world,
-            EcsPool<RMapModeUpdateColorsListFirst> requestPool,
+            EcsPool<R_MapModeUpdateColorsListFirst> requestPool,
             string coloredObjectType,
             List<Color> objectColors)
         {
             //Создаём новую сущность и назначаем ей запрос
             int requestEntity = world.NewEntity();
-            ref RMapModeUpdateColorsListFirst requestComp = ref requestPool.Add(requestEntity);
+            ref R_MapModeUpdateColorsListFirst requestComp = ref requestPool.Add(requestEntity);
 
             //Заполняем данные запроса
             requestComp = new(
@@ -45,13 +45,13 @@ namespace GBB.Map
 
         public static void MapModeUpdateColorsListSecondRequest(
             EcsWorld world,
-            EcsPool<RMapModeUpdateColorsListSecond> requestPool,
+            EcsPool<R_MapModeUpdateColorsListSecond> requestPool,
             EcsPackedEntity mapModePE,
             List<Color> mapModeColors, Color defaultColor)
         {
             //Создаём новую сущность и назначаем ей запрос
             int requestEntity = world.NewEntity();
-            ref RMapModeUpdateColorsListSecond requestComp = ref requestPool.Add(requestEntity);
+            ref R_MapModeUpdateColorsListSecond requestComp = ref requestPool.Add(requestEntity);
 
             //Заполняем данные запроса
             requestComp = new(
@@ -61,12 +61,12 @@ namespace GBB.Map
 
         internal static void MapModeActivationRequest(
             EcsWorld world,
-            EcsPool<RMapModeActivation> requestPool,
+            EcsPool<R_MapModeActivation> requestPool,
             EcsPackedEntity mapModePE)
         {
             //Создаём новую сущность и назначаем ей запрос
             int requestEntity = world.NewEntity();
-            ref RMapModeActivation requestComp = ref requestPool.Add(requestEntity);
+            ref R_MapModeActivation requestComp = ref requestPool.Add(requestEntity);
 
             //Заполняем данные запроса
             requestComp = new(
@@ -74,23 +74,23 @@ namespace GBB.Map
         }
 
         internal static void MapModeUpdateRequest(
-            EcsPool<SRMapModeUpdate> requestPool,
+            EcsPool<SR_MapModeUpdate> requestPool,
             int mapModeEntity)
         {
             //Назначаем сущности режима карты запрос 
-            ref SRMapModeUpdate requestComp = ref requestPool.Add(mapModeEntity);
+            ref SR_MapModeUpdate requestComp = ref requestPool.Add(mapModeEntity);
 
             //Заполняем данные запроса
             requestComp = new(0);
         }
 
         public static void UpdateThinEdgesRequest(
-            EcsPool<SRUpdateThinEdges> requestPool,
+            EcsPool<SR_UpdateThinEdges> requestPool,
             int targetEntity,
             int edgeIndex)
         {
             //Назначаем сущности запрос
-            ref SRUpdateThinEdges requestComp = ref requestPool.Add(targetEntity);
+            ref SR_UpdateThinEdges requestComp = ref requestPool.Add(targetEntity);
 
             //Заполняем данные запроса
             requestComp = new(
@@ -98,12 +98,12 @@ namespace GBB.Map
         }
         
         public static void UpdateThickEdgesRequest(
-            EcsPool<SRUpdateThickEdges> requestPool,
+            EcsPool<SR_UpdateThickEdges> requestPool,
             int targetEntity,
             int edgeIndex)
         {
             //Назначаем сущности запрос
-            ref SRUpdateThickEdges requestComp = ref requestPool.Add(targetEntity);
+            ref SR_UpdateThickEdges requestComp = ref requestPool.Add(targetEntity);
 
             //Заполняем данные запроса
             requestComp = new(
@@ -111,7 +111,7 @@ namespace GBB.Map
         }
 
         public static void UpdateProvinceRenderRequestFull(
-           EcsPool<SRUpdateProvinceRender> requestPool,
+           EcsPool<SR_UpdateProvinceRender> requestPool,
            //ref CMapModeCore mapMode,
            int targetEntity,
            EcsPackedEntity displayedObjectPE,
@@ -119,7 +119,7 @@ namespace GBB.Map
            int colorIndex)
         {
             //Назначаем сущности запрос
-            ref SRUpdateProvinceRender requestComp = ref requestPool.Add(targetEntity);
+            ref SR_UpdateProvinceRender requestComp = ref requestPool.Add(targetEntity);
 
             //Заполняем данные запроса
             requestComp = new(
@@ -129,16 +129,16 @@ namespace GBB.Map
         }
 
         public static void UpdateProvinceRenderRequestCreation(
-            EcsPool<SRUpdateProvinceRender> requestPool,
+            EcsPool<SR_UpdateProvinceRender> requestPool,
             int targetEntity)
         {
             //Назначаем сущности запрос
-            ref SRUpdateProvinceRender requestComp = ref requestPool.Add(targetEntity);
+            ref SR_UpdateProvinceRender requestComp = ref requestPool.Add(targetEntity);
         }
 
         public static void UpdateProvinceRenderRequestUpdate(
-            ref CMapModeCore mapMode,
-            ref SRUpdateProvinceRender requestComp,
+            ref C_MapModeCore mapMode,
+            ref SR_UpdateProvinceRender requestComp,
             EcsPackedEntity displayedObjectPE,
             float height,
             int colorIndex)
@@ -151,20 +151,20 @@ namespace GBB.Map
         }
 
         public static void ShowMapHoverHighlightRequest(
-            EcsPool<SRShowMapHoverHighlight> requestPool,
-            ref CMapModeCore mapMode,
+            EcsPool<SR_ShowMapHoverHighlight> requestPool,
+            ref C_MapModeCore mapMode,
             int targetEntity)
         {
             //Назначаем сущности запрос
-            ref SRShowMapHoverHighlight requestComp = ref requestPool.Add(targetEntity);
+            ref SR_ShowMapHoverHighlight requestComp = ref requestPool.Add(targetEntity);
 
             //Заполняем данные запроса
             requestComp = new(0);
         }
 
         internal static void UpdateProvinceDisplayedObject(
-            ref CMapModeCore mapMode,
-            ref CProvinceRender pR,
+            ref C_MapModeCore mapMode,
+            ref C_ProvinceRender pR,
             EcsPackedEntity displayedObjectPE)
         {
             //Если отображаемый объект провинции не равен переданному
@@ -176,7 +176,7 @@ namespace GBB.Map
         }
 
         internal static bool UpdateProvinceThinEdgesIndex(
-            ref CProvinceRender pR,
+            ref C_ProvinceRender pR,
             int newThinEdgesIndex)
         {
             //Если индекс тонких граней провинции не равен переданному
@@ -197,7 +197,7 @@ namespace GBB.Map
         }
 
         internal static bool UpdateProvinceThickEdgesIndex(
-            ref CProvinceRender pR,
+            ref C_ProvinceRender pR,
             int newThickEdgesIndex)
         {
             //Если индекс толстых граней провинции не равен переданному
@@ -218,8 +218,8 @@ namespace GBB.Map
         }
 
         internal static bool UpdateProvinceHeight(
-            ref CMapModeCore mapMode,
-            ref CProvinceRender pR,
+            ref C_MapModeCore mapMode,
+            ref C_ProvinceRender pR,
             float newProvinceHeight)
         {
             //Если высота провинции не равна переданной
@@ -240,8 +240,8 @@ namespace GBB.Map
         }
 
         internal static bool UpdateProvinceColorIndex(
-            ref CMapModeCore mapMode,
-            ref CProvinceRender pR,
+            ref C_MapModeCore mapMode,
+            ref C_ProvinceRender pR,
             int newProvinceColorIndex)
         {
             //Если индекс цвета провинции не равен переданному

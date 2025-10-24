@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace GBB.Core
 {
-    [CreateAssetMenu]
-    public class CoreModule : GameModule
+    internal class CoreModule : GameSubmodule
     {
-        public int seed;
+        [SerializeField]
+        private CoreData coreData;
 
         public override void AddSystems(GameStartup startup)
         {
@@ -24,21 +24,26 @@ namespace GBB.Core
             #endregion
 
             //Добавляем покадровые системы
+            #region PostFrame
+            //Очистка событий
+            startup.AddPostFrameSystem(new SEventsClear());
+            #endregion
 
             //Добавляем системы рендеринга
+            #region PostRender
+            //Очистка событий
+            startup.AddPostRenderSystem(new SEventsClear());
+            #endregion
 
             //Добавляем потиковые системы
-
+            #region PostTick
+            //Очистка событий
+            startup.AddPostTickSystem(new SEventsClear());
+            #endregion
         }
 
         public override void InjectData(GameStartup startup)
         {
-            //Создаём компонент данных
-            CoreData coreData = startup.AddDataObject().AddComponent<CoreData>();
-
-            //Переносим в него данные
-            coreData.seed = seed;
-
             //Вводим данные
             startup.InjectData(coreData);
         }

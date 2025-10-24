@@ -6,8 +6,8 @@ namespace GBB.Core
 {
     public class SEventsClear : IEcsInitSystem, IEcsRunSystem
     {
-        readonly EcsFilterInject<Inc<EObjectCreated>> objectCreatedEFilter = default;
-        readonly EcsPoolInject<EObjectCreated> objectCreatedEPool = default;
+        readonly EcsFilterInject<Inc<E_ObjectCreated>> objectCreatedEFilter = default;
+        readonly EcsPoolInject<E_ObjectCreated> objectCreatedEPool = default;
 
         public void Init(IEcsSystems systems)
         {

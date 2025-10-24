@@ -3,23 +3,25 @@ using UnityEngine;
 
 namespace GBB.Map
 {
-    [CreateAssetMenu]
-    internal class MapModule : GameModule
+    internal class MapModule : GameSubmodule
     {
-        public float mapPanelAltitude;
-
-        public GOProvince provinceGOPrefab;
-        public GOProvinceHighlight provinceHighlightGOPrefab;
-        public UnityEngine.UI.VerticalLayoutGroup provinceMapPanelGroupPrefab;
+        [SerializeField]
+        private MapData mapData;
+        [SerializeField]
+        private MapModeData mapModeData;
+        [SerializeField]
+        private ProvinceData provinceData;
 
         public override void AddSystems(GameStartup startup)
         {
             //Добавляем системы инициализации
             #region PreInit
-            //Создание карт и запросов генерации
-            startup.AddPreInitSystem(new SMapCreation());
+
             #endregion
             #region Init
+            //Создание карт и запросов генерации
+            startup.AddInitSystem(new SMapCreation());
+
             //Создание главных компонентов провинций
             //startup.AddInitSystem(new SProvinceCoreCreation());
 
@@ -61,30 +63,14 @@ namespace GBB.Map
 
         public override void InjectData(GameStartup startup)
         {
-            //Создаём компонент данных карт
-            MapData mapData = startup.AddDataObject().AddComponent<MapData>();
-
             //Вводим данные
             startup.InjectData(mapData);
-
-            //Создаём компонент данных режимов карты
-            MapModeData mapModeData = startup.AddDataObject().AddComponent<MapModeData>();
 
             //Вводим данные
             startup.InjectData(mapModeData);
 
-            //Создаём компонент данных провинций
-            ProvinceData provinceData = startup.AddDataObject().AddComponent<ProvinceData>();
-
-            //Переносим в него данные
-            provinceData.mapPanelAltitude = mapPanelAltitude;
-
             //Вводим данные
             startup.InjectData(provinceData);
-
-            GOProvince.provinceGOPrefab = provinceGOPrefab;
-            GOProvinceHighlight.provinceHighlightPrefab = provinceHighlightGOPrefab;
-            CProvinceMapPanels.mapPanelGroupPrefab = provinceMapPanelGroupPrefab;
         }
     }
 }
