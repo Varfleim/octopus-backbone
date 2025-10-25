@@ -11,7 +11,14 @@ namespace GBB.Map
     {
         internal EcsPackedEntity defaultMapModePE;
 
-        public EcsPackedEntity activeMapModePE;
+        public EcsPackedEntity ActiveMapModePE
+        {
+            get
+            {
+                return activeMapModePE;
+            }
+        }
+        internal EcsPackedEntity activeMapModePE;
 
         public static void MapModeCreationRequest(
             EcsPool<SR_MapModeCreation> requestPool,

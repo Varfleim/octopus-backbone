@@ -7,7 +7,15 @@ namespace GBB.Core
 {
     public class CoreData : MonoBehaviour
     {
-        public int seed;
+        public int Seed
+        {
+            get
+            {
+                return seed;
+            }
+        }
+        [SerializeField]
+        internal int seed;
 
         public static void ObjectCreatedEvent(
             EcsWorld world,
