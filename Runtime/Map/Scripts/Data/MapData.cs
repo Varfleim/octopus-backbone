@@ -5,7 +5,7 @@ using Leopotam.EcsLite;
 
 namespace GBB.Map
 {
-    internal class MapData : MonoBehaviour
+    public class MapData : MonoBehaviour
     {
         public EcsPackedEntity ActiveMapPE
         {
@@ -16,7 +16,7 @@ namespace GBB.Map
         }
         internal EcsPackedEntity activeMapPE;
 
-        public static void MapActivationRequest(
+        internal static void MapActivationRequest(
             EcsWorld world,
             EcsPool<R_MapActivation> requestPool,
             EcsPackedEntity mapPE)
