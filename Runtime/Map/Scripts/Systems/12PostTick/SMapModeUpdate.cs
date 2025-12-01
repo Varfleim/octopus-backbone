@@ -6,24 +6,26 @@ namespace GBB.Map
 {
     public class SMapModeUpdate : IEcsRunSystem
     {
+        readonly EcsWorldInject world = default;
+
+
+        readonly EcsCustomInject<MapModeData> mapModeData = default;
+
         public void Run(IEcsSystems systems)
         {
             //Запрашиваем обновление активного режима карты
             MapModeActiveUpdate();
         }
 
-        readonly EcsFilterInject<Inc<C_MapModeCore, CT_ActiveMapMode>> activeMapModeFilter = default;
         readonly EcsPoolInject<SR_MapModeUpdate> mapModeUpdateSRPool = default;
         void MapModeActiveUpdate()
         {
-            //Для каждого активного режима карты
-            foreach(int activeMapModeEntity in activeMapModeFilter.Value)
-            {
-                //Запрашиваем обновление режима карты
-                MapModeData.MapModeUpdateRequest(
-                    mapModeUpdateSRPool.Value,
-                    activeMapModeEntity);
-            }
+            //Берём сущность активного режима карты
+            mapModeData.Value.activeMapModePE.Unpack(world.Value, out int activeMapModeEntity);
+            //Запрашиваем обновление режима карты
+            MapModeData.MapModeUpdateRequest(
+                mapModeUpdateSRPool.Value,
+                activeMapModeEntity);
         }
     }
 }

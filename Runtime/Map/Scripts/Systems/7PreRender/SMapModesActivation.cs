@@ -15,6 +15,9 @@ namespace GBB.Map
 
         readonly EcsPoolInject<R_MapProvincesUpdate> mapProvincesUpdateRPool = default;
 
+
+        readonly EcsCustomInject<MapModeData> mapModeData = default;
+
         public void Run(IEcsSystems systems)
         {
             //Активируем режим карты по запросу
@@ -64,6 +67,8 @@ namespace GBB.Map
                 {
                     //Удаляем компонент активного режима
                     activeMapModePool.Value.Del(activeMapModeEntity);
+                    //Удаляем PE активного режима
+                    mapModeData.Value.activeMapModePE = new();
 
                     //Возвращаем, что режим карты деактивирован
                     return true;
@@ -89,6 +94,8 @@ namespace GBB.Map
 
             //Назначаем ему компонент активного режима
             activeMapModePool.Value.Add(mapModeEntity);
+            //Сохраняем PE режима как активного
+            mapModeData.Value.activeMapModePE = world.Value.PackEntity(mapModeEntity);
 
             //Удаляем все запросы обновления режимов карты
             MapModeUpdatesCancel();

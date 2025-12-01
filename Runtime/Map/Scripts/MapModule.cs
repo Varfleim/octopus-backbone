@@ -19,7 +19,7 @@ namespace GBB.Map
 
             #endregion
             #region Init
-            //Создание карт и запросов генерации
+            //Создание карт
             startup.AddInitSystem(new SMapCreation());
 
             //Создание главных компонентов провинций
@@ -55,6 +55,10 @@ namespace GBB.Map
             #endregion
 
             //Добавляем потиковые системы
+            #region PreTick
+            //Создание карт
+            startup.AddTickSystem(new SMapCreation());
+            #endregion
             #region PostTick
             //Запрос обновления активного режима карты
             startup.AddPostTickSystem(new SMapModeUpdate());

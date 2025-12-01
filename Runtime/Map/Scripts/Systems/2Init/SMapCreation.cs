@@ -4,6 +4,10 @@ using Leopotam.EcsLite.Di;
 
 namespace GBB.Map
 {
+    /// <summary>
+    /// Система, создающая основной компонент карты по запросу
+    /// Отрабатывает в Init и PreTick
+    /// </summary>
     public class SMapCreation : IEcsInitSystem, IEcsRunSystem
     {
         readonly EcsWorldInject world = default;
@@ -68,7 +72,7 @@ namespace GBB.Map
 
             //Заполняем основные данные карты
             map = new(
-                world.Value.PackEntity(mapEntity), requestComp.mapName);
+                requestComp.mapName);
         }
     }
 }

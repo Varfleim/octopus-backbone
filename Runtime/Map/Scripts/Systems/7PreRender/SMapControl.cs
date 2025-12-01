@@ -19,6 +19,7 @@ namespace GBB.Map
         readonly EcsPoolInject<R_MapRenderInitialization> mapRenderInitializationRPool = default;
 
 
+        readonly EcsCustomInject<MapData> mapData = default;
         readonly EcsCustomInject<MapModeData> mapModeData = default;
 
         public void Run(IEcsSystems systems)
@@ -84,6 +85,8 @@ namespace GBB.Map
 
                     //Удаляем компонент активной карты
                     activeMapPool.Value.Del(activeMapEntity);
+                    //Удаляем PE активной карты
+                    mapData.Value.activeMapPE = new();
 
                     //Возвращаем, что карта деактивирована
                     return true;
@@ -109,9 +112,11 @@ namespace GBB.Map
 
             //Назначаем ей компонент активной карты
             activeMapPool.Value.Add(mapEntity);
+            //Сохраняем PE карты как PE активной
+            mapData.Value.activeMapPE = world.Value.PackEntity(mapEntity);
 
             //Для каждой провинции карты
-            for(int a = 0; a < map.provincePEs.Length; a++)
+            for (int a = 0; a < map.provincePEs.Length; a++)
             {
                 //Берём сущность провинции и назначаем ей компонент PR
                 map.provincePEs[a].Unpack(world.Value, out int provinceEntity);

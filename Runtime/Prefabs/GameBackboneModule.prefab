@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2176068415102424739}
-  - component: {fileID: 5822226121383888344}
+  - component: {fileID: 4415616614915060408}
   - component: {fileID: 1779090653050885847}
   m_Layer: 0
   m_Name: InputSubmodule
@@ -33,7 +33,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8765143596022704789}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5822226121383888344
+--- !u!114 &4415616614915060408
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1597061699930504982}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e5fa22166e939e4f996259a03ab438a, type: 3}
+  m_Script: {fileID: 11500000, guid: 51dec175f156454488edf63f07b46a35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputData: {fileID: 1779090653050885847}
@@ -55,7 +55,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1597061699930504982}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6591c5aba096e974eae6842f36e18a33, type: 3}
+  m_Script: {fileID: 11500000, guid: 8deb022cefc2e154f8a6d71c403b60d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   leftMouseButtonClick: 0
@@ -122,7 +122,7 @@ MonoBehaviour:
   submodules:
   - {fileID: 3798602352032294335}
   - {fileID: 6028429969207106743}
-  - {fileID: 5822226121383888344}
+  - {fileID: 4415616614915060408}
 --- !u!1 &7248315162195295852
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,7 +132,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2223637755255817929}
-  - component: {fileID: 9005559807758997964}
   - component: {fileID: 6028429969207106743}
   - component: {fileID: 4837603466599553986}
   - component: {fileID: 6012541134392411126}
@@ -159,22 +158,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8765143596022704789}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9005559807758997964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7248315162195295852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f41e1b4f9b54460478e8ba5bba669a69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapPanelAltitude: 0.2
-  provinceGOPrefab: {fileID: 5274550238540852245, guid: bb1c207c759f2d641af6eac2d6586f31, type: 3}
-  provinceHighlightGOPrefab: {fileID: 6492647641375642767, guid: d4780a189111938468551d5985ec2e89, type: 3}
-  provinceMapPanelGroupPrefab: {fileID: 7496931896886670155, guid: 91cf15772c5a2b54e9a10c8cac8d7044, type: 3}
 --- !u!114 &6028429969207106743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,7 +167,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7248315162195295852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60520ee9078464542b6224dcb31f62a9, type: 3}
+  m_Script: {fileID: 11500000, guid: fb6e576a66b14e14b9468452efa3eda9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mapData: {fileID: 4837603466599553986}
@@ -199,7 +182,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7248315162195295852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbbc46e42b52afe4fa148d1b7fa470c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 507c04a66d829b14a8b5c4f3b12b218a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6012541134392411126
@@ -211,7 +194,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7248315162195295852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd9031b89cfde2a4cab48d3bfa478f12, type: 3}
+  m_Script: {fileID: 11500000, guid: c6b9f989f94e88241ba16f17caf6f561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6749988781435569471
@@ -223,7 +206,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7248315162195295852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0a0b23c28c62c444ad9794a7dee2942, type: 3}
+  m_Script: {fileID: 11500000, guid: e16784ceb6d2ad74ca2756705d35ae92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mapPanelAltitude: 0.2
@@ -272,7 +255,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8038264774125337154}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fefc6cb741d77f4c89a095059dc4a33, type: 3}
+  m_Script: {fileID: 11500000, guid: 413f6f903d4c08840a587c10fe6c638f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   coreData: {fileID: 2145406330807124371}
@@ -285,7 +268,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8038264774125337154}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be104ec04f44c61489b0344fcf8c9d26, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d8ee0426b1b6b044a92dad3d012f6ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 816081
+  seed: 0

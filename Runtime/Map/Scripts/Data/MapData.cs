@@ -7,6 +7,15 @@ namespace GBB.Map
 {
     internal class MapData : MonoBehaviour
     {
+        public EcsPackedEntity ActiveMapPE
+        {
+            get
+            {
+                return activeMapPE;
+            }
+        }
+        internal EcsPackedEntity activeMapPE;
+
         public static void MapActivationRequest(
             EcsWorld world,
             EcsPool<R_MapActivation> requestPool,

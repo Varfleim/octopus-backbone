@@ -34,6 +34,8 @@ namespace GBB.Map
             {
                 //Берём карту
                 ref C_Map map = ref mapPool.Value.Get(mapEntity);
+                //Создаём временную PE карты
+                EcsPackedEntity mapPE = world.Value.PackEntity(mapEntity);
 
                 //Очищаем временный список провинций
                 tempProvinces.Clear();
@@ -45,7 +47,7 @@ namespace GBB.Map
                     ref SR_ProvinceCoreCreation requestComp = ref pCCreationSRPool.Value.Get(provinceEntity);
 
                     //Если провинция принадлежит текущей карте
-                    if(requestComp.parentMapPE.EqualsTo(map.selfPE))
+                    if(requestComp.parentMapPE.EqualsTo(mapPE))
                     {
                         //Создаём PC по запросу
                         ProvinceCoreCreation(

@@ -10,16 +10,14 @@ namespace GBB.Map
     public struct C_MapModeCore
     {
         public C_MapModeCore(
-            EcsPackedEntity selfPE, string selfName)
+            string selfName)
         {
-            this.selfPE = selfPE;
             this.selfName = selfName;
 
             colors = new();
             defaultColor = new Color();
         }
 
-        public readonly EcsPackedEntity selfPE;
         public readonly string selfName;
 
         public readonly List<Color> colors;
