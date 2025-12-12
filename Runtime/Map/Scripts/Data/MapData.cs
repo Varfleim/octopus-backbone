@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 using UnityEngine;
 
 using Leopotam.EcsLite;
@@ -7,67 +9,72 @@ namespace GBB.Map
 {
     public class MapData : MonoBehaviour
     {
-        public EcsPackedEntity ActiveMapPE
+        public static void ProvinceCoreCreationRequest(
+            EcsPool<SR_ProvinceCoreCreation> requestPool,
+            int provinceEntity,
+            EcsPackedEntity parentMapPE,
+            List<EcsPackedEntity> neighbours)
         {
-            get
+            //Назначаем сущности запрос
+            ref SR_ProvinceCoreCreation requestComp = ref requestPool.Add(provinceEntity);
+
+            //Заполняем данные запроса
+            requestComp = new(
+                parentMapPE,
+                neighbours.ToArray());
+        }
+
+        /// <summary>
+        /// Требуемый фильтр - Inc<SR_ProvinceCoreCreation>
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="pCCreationSRFilter"></param>
+        public static void ProvincesCoreCreation(
+            EcsWorld world,
+            ref C_Map map,
+            EcsFilter pCCreationSRFilter, EcsPool<SR_ProvinceCoreCreation> pCCreationSRPool,
+            EcsPool<C_ProvinceCore> pCPool)
+        {
+            //Берём временный список из пула
+            List<EcsPackedEntity> tempProvincePEs = ListPool<EcsPackedEntity>.Get();
+
+            //Для каждой провинции с запросом создания PC
+            foreach (int provinceEntity in pCCreationSRFilter)
             {
-                return activeMapPE;
+                //Берём запрос
+                ref SR_ProvinceCoreCreation requestComp = ref pCCreationSRPool.Get(provinceEntity);
+
+                //Создаём PC по запросу
+                ProvinceCoreCreation(
+                    ref requestComp,
+                    provinceEntity,
+                    pCPool);
+
+                //Заносим провинцию во временный список
+                tempProvincePEs.Add(world.PackEntity(provinceEntity));
+
+                //Удаляем запрос
+                pCCreationSRPool.Del(provinceEntity);
             }
-        }
-        internal EcsPackedEntity activeMapPE;
 
-        internal static void MapActivationRequest(
-            EcsWorld world,
-            EcsPool<R_MapActivation> requestPool,
-            EcsPackedEntity mapPE)
-        {
-            //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.NewEntity();
-            ref R_MapActivation requestComp = ref requestPool.Add(requestEntity);
+            //Сохраняем список как массив провинций карты
+            map.provincePEs = tempProvincePEs.ToArray();
 
-            //Заполняем данные запроса
-            requestComp = new(
-                mapPE);
+            //Возвращаем список в пул
+            ListPool<EcsPackedEntity>.Add(tempProvincePEs);
         }
 
-        public static void MapRenderInitializationRequest(
-            EcsWorld world,
-            EcsPool<R_MapRenderInitialization> requestPool)
+        private static void ProvinceCoreCreation(
+            ref SR_ProvinceCoreCreation requestComp,
+            int provinceEntity,
+            EcsPool<C_ProvinceCore> pCPool)
         {
-            //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.NewEntity();
-            ref R_MapRenderInitialization requestComp = ref requestPool.Add(requestEntity);
+            //Назначаем сущности компонент PC
+            ref C_ProvinceCore pC = ref pCPool.Add(provinceEntity);
 
-            //Заполняем данные запроса
-            requestComp = new(0);
-        }
-
-        public static void MapEdgesUpdateRequest(
-            EcsWorld world,
-            EcsPool<R_MapEdgesUpdate> requestPool,
-            bool isThinUpdated, bool isThickUpdated)
-        {
-            //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.NewEntity();
-            ref R_MapEdgesUpdate requestComp = ref requestPool.Add(requestEntity);
-
-            //Заполняем данные запроса
-            requestComp = new(
-                isThinUpdated, isThickUpdated, false);
-        }
-
-        public static void MapProvincesUpdateRequest(
-            EcsWorld world,
-            EcsPool<R_MapProvincesUpdate> requestPool,
-            bool isMaterialUpdated, bool isHeightUpdated, bool isColorUpdated)
-        {
-            //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.NewEntity();
-            ref R_MapProvincesUpdate requestComp = ref requestPool.Add(requestEntity);
-
-            //Заполняем данные запроса
-            requestComp = new(
-                isMaterialUpdated, isHeightUpdated, isColorUpdated);
+            //Заполняем основные данные PC
+            pC = new(
+                requestComp.neighbourProvincePEs);
         }
     }
 }

@@ -1,0 +1,39 @@
+
+using Leopotam.EcsLite;
+using Leopotam.EcsLite.Di;
+using Leopotam.EcsLite.ExtendedSystems;
+
+namespace GBB.Map.Render
+{
+    public class SMapModeRenderStart : IEcsRunSystem
+    {
+        readonly EcsWorldInject world = default;
+
+        public void Run(IEcsSystems systems)
+        {
+            //Включаем системы визуализации режимов карты
+            MapModesRenderSystemsActivation();
+        }
+
+        readonly EcsFilterInject<Inc<C_MapModeCore, SR_MapModeUpdate>> mapModeUpdateSRFilter = default;
+        readonly EcsPoolInject<C_MapModeCore> mapModeCorePool = default;
+        readonly EcsPoolInject<EcsGroupSystemState> ecsGroupSystemStatePool = default;
+        void MapModesRenderSystemsActivation()
+        {
+            //Для каждого режима карты с запросом обновления
+            foreach (int mapModeEntity in mapModeUpdateSRFilter.Value)
+            {
+                //Берём режим карты
+                ref C_MapModeCore mapMode = ref mapModeCorePool.Value.Get(mapModeEntity);
+
+                //Создаём новую сущность и назначаем ей запрос переключения группы систем
+                int requestEntity = world.Value.NewEntity();
+                ref EcsGroupSystemState requestComp = ref ecsGroupSystemStatePool.Value.Add(requestEntity);
+
+                //Заполняем данные запроса
+                requestComp.Name = mapMode.selfName;
+                requestComp.State = true;
+            }
+        }
+    }
+}
