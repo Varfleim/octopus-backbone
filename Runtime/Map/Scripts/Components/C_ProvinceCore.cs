@@ -9,13 +9,13 @@ namespace GBB.Map
     public struct C_ProvinceCore
     {
         public C_ProvinceCore(
-            EcsPackedEntity[] neighbourProvincePEs)
+            int[] neighbourProvinceEntities)
         {
-            this.neighbourProvincePEs = neighbourProvincePEs;
+            this.neighbourProvinceEntities = neighbourProvinceEntities;
         }
 
         #region ProvinceData
-        public readonly EcsPackedEntity[] neighbourProvincePEs;
+        public readonly int[] neighbourProvinceEntities;
         #endregion
     }
 }

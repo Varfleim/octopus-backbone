@@ -10,9 +10,6 @@ namespace GBB.Map
     /// </summary>
     public class SMapCreation : IEcsInitSystem, IEcsRunSystem
     {
-        readonly EcsWorldInject world = default;
-
-
         readonly EcsPoolInject<C_Map> mapPool = default;
 
         public void Init(IEcsSystems systems)

@@ -86,11 +86,10 @@ namespace GBB.Map.Render
             mapRenderData.Value.ActiveMapPE = world.Value.PackEntity(mapEntity);
 
             //Для каждой провинции карты
-            for (int a = 0; a < map.provincePEs.Length; a++)
+            for (int a = 0; a < map.provinceEntities.Length; a++)
             {
                 //Берём сущность провинции и назначаем ей компонент PR
-                map.provincePEs[a].Unpack(world.Value, out int provinceEntity);
-                ref C_ProvinceRender pR = ref pRPool.Value.Add(provinceEntity);
+                ref C_ProvinceRender pR = ref pRPool.Value.Add(map.provinceEntities[a]);
 
                 //Заполняем данные PR
                 pR = new(0);

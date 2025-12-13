@@ -1,21 +1,19 @@
 
-using Leopotam.EcsLite;
-
 namespace GBB.Map
 {
     public readonly struct SR_ProvinceCoreCreation
     {
         public SR_ProvinceCoreCreation(
-            EcsPackedEntity parentMapPE,
-            EcsPackedEntity[] neighbourProvincePEs)
+            int parentMapEntity,
+            int[] neighbourProvinceEntities)
         {
-            this.parentMapPE = parentMapPE;
+            this.parentMapEntity = parentMapEntity;
 
-            this.neighbourProvincePEs = neighbourProvincePEs;
+            this.neighbourProvinceEntities = neighbourProvinceEntities;
         }
 
-        public readonly EcsPackedEntity parentMapPE;
+        public readonly int parentMapEntity;
 
-        public readonly EcsPackedEntity[] neighbourProvincePEs;
+        public readonly int[] neighbourProvinceEntities;
     }
 }

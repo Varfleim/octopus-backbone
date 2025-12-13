@@ -19,15 +19,15 @@ namespace GBB.Map
         public static void ProvinceCoreCreationRequest(
             EcsPool<SR_ProvinceCoreCreation> requestPool,
             int provinceEntity,
-            EcsPackedEntity parentMapPE,
-            List<EcsPackedEntity> neighbours)
+            int parentMapEntity,
+            List<int> neighbours)
         {
             //Назначаем сущности запрос
             ref SR_ProvinceCoreCreation requestComp = ref requestPool.Add(provinceEntity);
 
             //Заполняем данные запроса
             requestComp = new(
-                parentMapPE,
+                parentMapEntity,
                 neighbours.ToArray());
         }
 
@@ -38,13 +38,12 @@ namespace GBB.Map
         /// <param name="map"></param>
         /// <param name="pCCreationSRFilter"></param>
         public static void ProvincesCoreCreation(
-            EcsWorld world,
             ref C_Map map,
             EcsFilter pCCreationSRFilter, EcsPool<SR_ProvinceCoreCreation> pCCreationSRPool,
             EcsPool<C_ProvinceCore> pCPool)
         {
             //Берём временный список из пула
-            List<EcsPackedEntity> tempProvincePEs = ListPool<EcsPackedEntity>.Get();
+            List<int> tempProvinceEntities = ListPool<int>.Get();
 
             //Для каждой провинции с запросом создания PC
             foreach (int provinceEntity in pCCreationSRFilter)
@@ -59,17 +58,17 @@ namespace GBB.Map
                     pCPool);
 
                 //Заносим провинцию во временный список
-                tempProvincePEs.Add(world.PackEntity(provinceEntity));
+                tempProvinceEntities.Add(provinceEntity);
 
                 //Удаляем запрос
                 pCCreationSRPool.Del(provinceEntity);
             }
 
             //Сохраняем список как массив провинций карты
-            map.provincePEs = tempProvincePEs.ToArray();
+            map.provinceEntities = tempProvinceEntities.ToArray();
 
             //Возвращаем список в пул
-            ListPool<EcsPackedEntity>.Add(tempProvincePEs);
+            ListPool<int>.Add(tempProvinceEntities);
         }
 
         /// <summary>
@@ -88,7 +87,7 @@ namespace GBB.Map
 
             //Заполняем основные данные PC
             pC = new(
-                requestComp.neighbourProvincePEs);
+                requestComp.neighbourProvinceEntities);
         }
     }
 }

@@ -1,6 +1,4 @@
 
-using Leopotam.EcsLite;
-
 namespace GBB.Map
 {
     public struct C_Map
@@ -9,27 +7,27 @@ namespace GBB.Map
             string selfName)
         {
             this.selfName = selfName;
-            
-            provincePEs = new EcsPackedEntity[0];
+
+            provinceEntities = new int[0];
         }
 
         public readonly string selfName;
 
-        public EcsPackedEntity[] provincePEs;
+        public int[] provinceEntities;
 
-        public EcsPackedEntity GetProvince(
+        public int GetProvince(
             int provinceIndex)
         {
-            return provincePEs[provinceIndex];
+            return provinceEntities[provinceIndex];
         }
 
         /// <summary>
         /// Ќельз€ использовать в многопоточных системах
         /// </summary>
         /// <returns></returns>
-        public EcsPackedEntity GetProvinceRandom()
+        public int GetProvinceRandom()
         {
-            return GetProvince(UnityEngine.Random.Range(0, provincePEs.Length));
+            return GetProvince(UnityEngine.Random.Range(0, provinceEntities.Length));
         }
     }
 }

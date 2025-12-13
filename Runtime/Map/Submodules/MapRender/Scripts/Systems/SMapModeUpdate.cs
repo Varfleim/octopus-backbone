@@ -20,13 +20,14 @@ namespace GBB.Map.Render
         readonly EcsPoolInject<SR_MapModeUpdate> mapModeUpdateSRPool = default;
         void MapModeActiveUpdate()
         {
-            //Берём сущность активного режима карты
-            mainMapModeData.Value.ActiveMapModePE.Unpack(world.Value, out int activeMapModeEntity);
-
-            //Запрашиваем обновление режима карты
-            MainMapModeData.MapModeUpdateRequest(
-                mapModeUpdateSRPool.Value,
-                activeMapModeEntity);
+            //Если есть активный режим карты
+            if(mainMapModeData.Value.ActiveMapModePE.Unpack(world.Value, out int activeMapModeEntity))
+            {
+                //Запрашиваем обновление режима карты
+                MainMapModeData.MapModeUpdateRequest(
+                    mapModeUpdateSRPool.Value,
+                    activeMapModeEntity);
+            }
         }
     }
 }
