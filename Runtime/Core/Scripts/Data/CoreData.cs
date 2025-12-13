@@ -15,7 +15,7 @@ namespace GBB.Core
             }
         }
         [SerializeField]
-        internal int seed;
+        private int seed;
 
         public static void ObjectCreatedEvent(
             EcsWorld world,

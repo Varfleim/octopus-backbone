@@ -9,7 +9,7 @@ namespace GBB.Map.Render
         readonly EcsWorldInject world = default;
 
 
-        readonly EcsCustomInject<MapModeData> mapModeData = default;
+        readonly EcsCustomInject<MainMapModeData> mainMapModeData = default;
 
         public void Run(IEcsSystems systems)
         {
@@ -21,10 +21,10 @@ namespace GBB.Map.Render
         void MapModeActiveUpdate()
         {
             //Берём сущность активного режима карты
-            mapModeData.Value.ActiveMapModePE.Unpack(world.Value, out int activeMapModeEntity);
+            mainMapModeData.Value.ActiveMapModePE.Unpack(world.Value, out int activeMapModeEntity);
 
             //Запрашиваем обновление режима карты
-            MapModeData.MapModeUpdateRequest(
+            MainMapModeData.MapModeUpdateRequest(
                 mapModeUpdateSRPool.Value,
                 activeMapModeEntity);
         }

@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapRenderData: {fileID: 6998709462635248907}
-  mapModeData: {fileID: 7500772762554970621}
+  mainMapModeData: {fileID: 7500772762554970621}
 --- !u!114 &6998709462635248907
 MonoBehaviour:
   m_ObjectHideFlags: 0

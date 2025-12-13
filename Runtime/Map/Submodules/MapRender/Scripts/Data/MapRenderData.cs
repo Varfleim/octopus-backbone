@@ -28,7 +28,7 @@ namespace GBB.Map.Render
             }
         }
         [SerializeField]
-        internal float mapPanelAltitude;
+        private float mapPanelAltitude;
 
         public GO_Province ProvinceGOPrefab
         {
@@ -38,7 +38,7 @@ namespace GBB.Map.Render
             }
         }
         [SerializeField]
-        internal GO_Province provinceGOPrefab;
+        private GO_Province provinceGOPrefab;
         public GO_ProvinceHighlight ProvinceHighlightGOPrefab
         {
             get
@@ -47,7 +47,7 @@ namespace GBB.Map.Render
             }
         }
         [SerializeField]
-        internal GO_ProvinceHighlight provinceHighlightGOPrefab;
+        private GO_ProvinceHighlight provinceHighlightGOPrefab;
         public UnityEngine.UI.VerticalLayoutGroup ProvinceMapPanelGroupPrefab
         {
             get
@@ -56,9 +56,15 @@ namespace GBB.Map.Render
             }
         }
         [SerializeField]
-        internal UnityEngine.UI.VerticalLayoutGroup provinceMapPanelGroupPrefab;
+        private UnityEngine.UI.VerticalLayoutGroup provinceMapPanelGroupPrefab;
 
-        internal static void MapActivationRequest(
+        /// <summary>
+        /// Публичная функция, поскольку запрашивается из модуля игры
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="requestPool"></param>
+        /// <param name="mapPE"></param>
+        public static void MapActivationRequest(
             EcsWorld world,
             EcsPool<R_MapActivation> requestPool,
             EcsPackedEntity mapPE)
@@ -72,33 +78,15 @@ namespace GBB.Map.Render
                 mapPE);
         }
 
-        public static void MapRenderInitializationRequest(
-            EcsWorld world,
-            EcsPool<R_MapRenderInitialization> requestPool)
-        {
-            //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.NewEntity();
-            ref R_MapRenderInitialization requestComp = ref requestPool.Add(requestEntity);
-
-            //Заполняем данные запроса
-            requestComp = new(0);
-        }
-
-        public static void MapEdgesUpdateRequest(
-            EcsWorld world,
-            EcsPool<R_MapEdgesUpdate> requestPool,
-            bool isThinUpdated, bool isThickUpdated)
-        {
-            //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.NewEntity();
-            ref R_MapEdgesUpdate requestComp = ref requestPool.Add(requestEntity);
-
-            //Заполняем данные запроса
-            requestComp = new(
-                isThinUpdated, isThickUpdated, false);
-        }
-
-        public static void MapProvincesUpdateRequest(
+        /// <summary>
+        /// Внутренняя функция, поскольку запрашивается из подмодуля карты
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="requestPool"></param>
+        /// <param name="isMaterialUpdated"></param>
+        /// <param name="isHeightUpdated"></param>
+        /// <param name="isColorUpdated"></param>
+        internal static void MapProvincesUpdateRequest(
             EcsWorld world,
             EcsPool<R_MapProvincesUpdate> requestPool,
             bool isMaterialUpdated, bool isHeightUpdated, bool isColorUpdated)
@@ -112,6 +100,13 @@ namespace GBB.Map.Render
                 isMaterialUpdated, isHeightUpdated, isColorUpdated);
         }
 
+        /// <summary>
+        /// Публичная функция, поскольку запрашивается из модуля игры
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="requestPool"></param>
+        /// <param name="parentProvincePE"></param>
+        /// <param name="mapPanelGO"></param>
         public static void ProvinceMapPanelSetParentRequest(
             EcsWorld world,
             EcsPool<R_ProvinceMapPanelSetParent> requestPool,

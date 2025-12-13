@@ -9,6 +9,13 @@ namespace GBB.Map
 {
     public class MapData : MonoBehaviour
     {
+        /// <summary>
+        /// Публичная функция, поскольку запрашивается из модуля представления карты
+        /// </summary>
+        /// <param name="requestPool"></param>
+        /// <param name="provinceEntity"></param>
+        /// <param name="parentMapPE"></param>
+        /// <param name="neighbours"></param>
         public static void ProvinceCoreCreationRequest(
             EcsPool<SR_ProvinceCoreCreation> requestPool,
             int provinceEntity,
@@ -25,6 +32,7 @@ namespace GBB.Map
         }
 
         /// <summary>
+        /// Публичная функция, поскольку запрашивается из модуля представления карты
         /// Требуемый фильтр - Inc<SR_ProvinceCoreCreation>
         /// </summary>
         /// <param name="map"></param>
@@ -64,6 +72,12 @@ namespace GBB.Map
             ListPool<EcsPackedEntity>.Add(tempProvincePEs);
         }
 
+        /// <summary>
+        /// Закрытая функция, поскольку запрашивается только косвенно
+        /// </summary>
+        /// <param name="requestComp"></param>
+        /// <param name="provinceEntity"></param>
+        /// <param name="pCPool"></param>
         private static void ProvinceCoreCreation(
             ref SR_ProvinceCoreCreation requestComp,
             int provinceEntity,

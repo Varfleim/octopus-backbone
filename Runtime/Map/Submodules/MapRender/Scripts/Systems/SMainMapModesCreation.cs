@@ -9,7 +9,7 @@ namespace GBB.Map.Render
         readonly EcsWorldInject world = default;
 
 
-        readonly EcsCustomInject<MapModeData> mapModeData = default;
+        readonly EcsCustomInject<MainMapModeData> mainMapModeData = default;
 
         public void Init(IEcsSystems systems)
         {
@@ -40,7 +40,7 @@ namespace GBB.Map.Render
                 if(requestComp.defaultMapMode == true)
                 {
                     //Сохраняем его как стандартный режим карты
-                    mapModeData.Value.defaultMapModePE = world.Value.PackEntity(mapModeEntity);
+                    mainMapModeData.Value.DefaultMapModePE = world.Value.PackEntity(mapModeEntity);
                 }
                 //ТЕСТ
 

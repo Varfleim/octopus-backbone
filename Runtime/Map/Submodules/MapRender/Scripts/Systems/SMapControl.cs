@@ -13,7 +13,7 @@ namespace GBB.Map.Render
 
 
         readonly EcsCustomInject<MapRenderData> mapRenderData = default;
-        readonly EcsCustomInject<MapModeData> mapModeData = default;
+        readonly EcsCustomInject<MainMapModeData> mainMapModeData = default;
 
         public void Run(IEcsSystems systems)
         {
@@ -75,7 +75,6 @@ namespace GBB.Map.Render
         }
 
         readonly EcsPoolInject<C_Map> mapPool = default;
-        readonly EcsPoolInject<R_MapRenderInitialization> mapRenderInitializationRPool = default;
         void MapActivation(
             ref R_MapActivation requestComp)
         {
@@ -98,22 +97,31 @@ namespace GBB.Map.Render
             }
 
             //Запрашиваем инициализацию карты
-            MapRenderData.MapRenderInitializationRequest(
-                world.Value,
-                mapRenderInitializationRPool.Value);
+            MapRenderInitializationRequest();
 
             //Запрашиваем активацию стандартного режима карты
             MapModeDefaultActivation();
+        }
+
+        readonly EcsPoolInject<R_MapRenderInitialization> mapRenderInitializationRPool = default;
+        void MapRenderInitializationRequest()
+        {
+            //Создаём новую сущность и назначаем ей запрос
+            int requestEntity = world.Value.NewEntity();
+            ref R_MapRenderInitialization requestComp = ref mapRenderInitializationRPool.Value.Add(requestEntity);
+
+            //Заполняем данные запроса
+            requestComp = new(0);
         }
 
         readonly EcsPoolInject<R_MapModeActivation> mapModeActivationRPool = default;
         void MapModeDefaultActivation()
         {
             //Запрашиваем активацию стандартного режима карты
-            MapModeData.MapModeActivationRequest(
+            MainMapModeData.MapModeActivationRequest(
                 world.Value,
                 mapModeActivationRPool.Value,
-                mapModeData.Value.defaultMapModePE);
+                mainMapModeData.Value.DefaultMapModePE);
         }
     }
 }

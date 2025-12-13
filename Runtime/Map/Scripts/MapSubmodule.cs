@@ -14,9 +14,6 @@ namespace GBB.Map
             #region Init
             //Создание карт
             startup.AddInitSystem(new SMapCreation());
-
-            //Создание главных компонентов провинций
-            //startup.AddInitSystem(new SProvinceCoreCreation());
             #endregion
 
             //Добавляем покадровые системы

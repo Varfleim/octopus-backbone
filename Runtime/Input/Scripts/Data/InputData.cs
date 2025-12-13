@@ -5,7 +5,7 @@ using Leopotam.EcsLite;
 
 namespace GBB.Input
 {
-    internal class InputData : MonoBehaviour
+    public class InputData : MonoBehaviour
     {
         #region Mouse
         public bool leftMouseButtonClick;

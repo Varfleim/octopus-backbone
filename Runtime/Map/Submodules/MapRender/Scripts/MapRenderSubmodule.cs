@@ -8,7 +8,7 @@ namespace GBB.Map.Render
         [SerializeField]
         private MapRenderData mapRenderData;
         [SerializeField]
-        private MapModeData mapModeData;
+        private MainMapModeData mainMapModeData;
 
         public override void AddSystems(GameStartup startup)
         {
@@ -56,7 +56,7 @@ namespace GBB.Map.Render
             startup.InjectData(mapRenderData);
 
             //¬водим данные
-            startup.InjectData(mapModeData);
+            startup.InjectData(mainMapModeData);
         }
     }
 }

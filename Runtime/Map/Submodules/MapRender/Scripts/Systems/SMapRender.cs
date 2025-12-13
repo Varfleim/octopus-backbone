@@ -22,7 +22,6 @@ namespace GBB.Map.Render
             MapModesDataUpdate();
         }
 
-        readonly EcsPoolInject<R_MapEdgesUpdate> mapEdgesUpdateRPool = default;
         void MapEdgesDataUpdate()
         {
             //Проверяем, какие грани требуется обновить
@@ -48,11 +47,22 @@ namespace GBB.Map.Render
                 || isThickUpdated == true)
             {
                 //Запрашиваем обновление граней карты
-                MapRenderData.MapEdgesUpdateRequest(
-                    world.Value,
-                    mapEdgesUpdateRPool.Value,
+                MapEdgesUpdateRequest(
                     isThinUpdated, isThickUpdated);
             }
+        }
+
+        readonly EcsPoolInject<R_MapEdgesUpdate> mapEdgesUpdateRPool = default;
+        void MapEdgesUpdateRequest(
+            bool isThinUpdated, bool isThickUpdated)
+        {
+            //Создаём новую сущность и назначаем ей запрос
+            int requestEntity = world.Value.NewEntity();
+            ref R_MapEdgesUpdate requestComp = ref mapEdgesUpdateRPool.Value.Add(requestEntity);
+
+            //Заполняем данные запроса
+            requestComp = new(
+                isThinUpdated, isThickUpdated, false);
         }
 
         readonly EcsFilterInject<Inc<C_ProvinceRender, SR_UpdateThinEdges>> provinceUpdateThinEdgesSRFilter = default;
@@ -71,7 +81,7 @@ namespace GBB.Map.Render
                 ref C_ProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
 
                 //Если индекс тонких граней был обновлён
-                if(MapModeData.UpdateProvinceThinEdgesIndex(
+                if(UpdateProvinceThinEdgesIndex(
                     ref pR,
                     -1) == true)
                 {
@@ -95,7 +105,7 @@ namespace GBB.Map.Render
                 ref SR_UpdateThinEdges requestComp = ref updateThinEdgesSRPool.Value.Get(provinceEntity);
 
                 //Если индекс тонких граней был обновлён
-                if (MapModeData.UpdateProvinceThinEdgesIndex(
+                if (UpdateProvinceThinEdgesIndex(
                     ref pR,
                     requestComp.edgeIndex) == true)
                 {
@@ -105,6 +115,27 @@ namespace GBB.Map.Render
 
                 //Удаляем запрос
                 updateThinEdgesSRPool.Value.Del(provinceEntity);
+            }
+        }
+
+        bool UpdateProvinceThinEdgesIndex(
+            ref C_ProvinceRender pR,
+            int newThinEdgesIndex)
+        {
+            //Если индекс тонких граней провинции не равен переданному
+            if (pR.ThinEdgesIndex != newThinEdgesIndex)
+            {
+                //Обновляем его
+                pR.ThinEdgesIndex = newThinEdgesIndex;
+
+                //Возвращаем, что индекс был обновлён
+                return true;
+            }
+            //Иначе
+            else
+            {
+                //Возвращаем, что индекс не был обновлён
+                return false;
             }
         }
 
@@ -124,7 +155,7 @@ namespace GBB.Map.Render
                 ref C_ProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
 
                 //Если индекс толстых граней был обновлён
-                if (MapModeData.UpdateProvinceThickEdgesIndex(
+                if (UpdateProvinceThickEdgesIndex(
                     ref pR,
                     -1) == true)
                 {
@@ -148,7 +179,7 @@ namespace GBB.Map.Render
                 ref SR_UpdateThickEdges requestComp = ref updateThickEdgesSRPool.Value.Get(provinceEntity);
 
                 //Если индекс толстых граней был обновлён
-                if (MapModeData.UpdateProvinceThickEdgesIndex(
+                if (UpdateProvinceThickEdgesIndex(
                     ref pR,
                     requestComp.edgeIndex) == true)
                 {
@@ -158,6 +189,27 @@ namespace GBB.Map.Render
 
                 //Удаляем запрос
                 updateThickEdgesSRPool.Value.Del(provinceEntity);
+            }
+        }
+
+        bool UpdateProvinceThickEdgesIndex(
+            ref C_ProvinceRender pR,
+            int newThickEdgesIndex)
+        {
+            //Если индекс толстых граней провинции не равен переданному
+            if (pR.ThickEdgesIndex != newThickEdgesIndex)
+            {
+                //Обновляем его
+                pR.ThickEdgesIndex = newThickEdgesIndex;
+
+                //Возвращаем, что индекс был обновлён
+                return true;
+            }
+            //Иначе
+            else
+            {
+                //Возвращаем, что индекс не был обновлён
+                return false;
             }
         }
 
@@ -203,14 +255,14 @@ namespace GBB.Map.Render
                 ref C_ProvinceRender pR = ref pRPool.Value.Get(provinceEntity);
 
                 //Обновляем отображаемый объект провинции
-                MapModeData.UpdateProvinceDisplayedObject(
+                UpdateProvinceDisplayedObject(
                     ref mapMode,
                     ref pR,
                     new());
 
                 //Изменяем параметры визуализации провинции
                 //Если высота была обновлена
-                if(MapModeData.UpdateProvinceHeight(
+                if(UpdateProvinceHeight(
                     ref mapMode,
                     ref pR,
                     0.0f) == true)
@@ -220,7 +272,7 @@ namespace GBB.Map.Render
                 }
 
                 //Если индекс цвета был обновлён
-                if(MapModeData.UpdateProvinceColorIndex(
+                if(UpdateProvinceColorIndex(
                     ref mapMode,
                     ref pR,
                     -1) == true)
@@ -246,14 +298,14 @@ namespace GBB.Map.Render
                 ref SR_UpdateProvinceRender requestComp = ref updateProvinceRenderSRPool.Value.Get(provinceEntity);
 
                 //Обновляем отображаемый объект провинции
-                MapModeData.UpdateProvinceDisplayedObject(
+                UpdateProvinceDisplayedObject(
                     ref mapMode,
                     ref pR,
                     requestComp.displayedObjectPE);
 
                 //Изменяем параметры визуализации провинции
                 //Если высота была обновлена
-                if (MapModeData.UpdateProvinceHeight(
+                if (UpdateProvinceHeight(
                     ref mapMode,
                     ref pR,
                     requestComp.height) == true)
@@ -263,7 +315,7 @@ namespace GBB.Map.Render
                 }
 
                 //Если индекс цвета был обновлён
-                if (MapModeData.UpdateProvinceColorIndex(
+                if (UpdateProvinceColorIndex(
                     ref mapMode,
                     ref pR,
                     requestComp.colorIndex) == true)
@@ -274,6 +326,63 @@ namespace GBB.Map.Render
 
                 //Удаляем запрос
                 updateProvinceRenderSRPool.Value.Del(provinceEntity);
+            }
+        }
+
+        void UpdateProvinceDisplayedObject(
+            ref C_MapModeCore mapMode,
+            ref C_ProvinceRender pR,
+            EcsPackedEntity displayedObjectPE)
+        {
+            //Если отображаемый объект провинции не равен переданному
+            if (pR.DisplayedObjectPE.EqualsTo(in displayedObjectPE) == false)
+            {
+                //Обновляем его
+                pR.DisplayedObjectPE = displayedObjectPE;
+            }
+        }
+
+        bool UpdateProvinceHeight(
+            ref C_MapModeCore mapMode,
+            ref C_ProvinceRender pR,
+            float newProvinceHeight)
+        {
+            //Если высота провинции не равна переданной
+            if (pR.ProvinceHeight != newProvinceHeight)
+            {
+                //Обновляем её
+                pR.ProvinceHeight = newProvinceHeight;
+
+                //Возвращаем, что высота была обновлена
+                return true;
+            }
+            //Иначе
+            else
+            {
+                //Возвращаем, что высота не была обновлена
+                return false;
+            }
+        }
+
+        bool UpdateProvinceColorIndex(
+            ref C_MapModeCore mapMode,
+            ref C_ProvinceRender pR,
+            int newProvinceColorIndex)
+        {
+            //Если индекс цвета провинции не равен переданному
+            if (pR.ProvinceColorIndex != newProvinceColorIndex)
+            {
+                //Обновляем его
+                pR.ProvinceColorIndex = (newProvinceColorIndex);
+
+                //Возвращаем, что индекс цвета был обновлён
+                return true;
+            }
+            //Иначе
+            else
+            {
+                //Возвращаем, что индекс цвета не был обновлён
+                return false;
             }
         }
     }

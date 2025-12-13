@@ -12,7 +12,7 @@ namespace GBB.Core
 
         public void Init(IEcsSystems systems)
         {
-            Random.InitState(coreData.Value.seed);
+            Random.InitState(coreData.Value.Seed);
         }
     }
 }
