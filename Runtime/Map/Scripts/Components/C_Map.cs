@@ -15,7 +15,7 @@ namespace GBB.Map
 
         public int[] provinceEntities;
 
-        public int GetProvince(
+        public int Province_Get(
             int provinceIndex)
         {
             return provinceEntities[provinceIndex];
@@ -25,9 +25,9 @@ namespace GBB.Map
         /// Ќельз€ использовать в многопоточных системах
         /// </summary>
         /// <returns></returns>
-        public int GetProvinceRandom()
+        public int Province_GetRandom()
         {
-            return GetProvince(UnityEngine.Random.Range(0, provinceEntities.Length));
+            return Province_Get(UnityEngine.Random.Range(0, provinceEntities.Length));
         }
     }
 }

@@ -53,7 +53,7 @@ namespace GBB
         void Start()
         {
             //Инициализируем пулы списков
-            InitListPools();
+            ListPools_Init();
 
             //Инициализируем мир и группы систем
             world = new EcsWorld();
@@ -86,18 +86,18 @@ namespace GBB
             for (int a = 0; a < modules.Count; a++)
             {
                 //Добавляем системы
-                modules[a].AddSubmodulesSystems(this);
+                modules[a].Submodules_AddSystems(this);
             }
 
             //Для каждого модуля вводим данные
             for (int a = 0; a < modules.Count; a++)
             {
                 //Вводим данные
-                modules[a].InjectSubmodulesData(this);
+                modules[a].Submodules_InjectData(this);
             }
 
             //Вводим данные
-            InjectData(runtimeData);
+            Data_Inject(runtimeData);
 
             //Выполняем инициализацию систем
             preInitSystems.Init();
@@ -234,42 +234,42 @@ namespace GBB
             }
         }
 
-        public void InitListPools()
+        public void ListPools_Init()
         {
 
         }
 
-        public void AddPreInitSystem(IEcsSystem system)
+        public void PreInitSystem_Add(IEcsSystem system)
         {
             preInitSystems.Add(system);
         }
-        public void AddInitSystem(IEcsSystem system)
+        public void InitSystem_Add(IEcsSystem system)
         {
             initSystems.Add(system);
         }
-        public void AddPostInitSystem(IEcsSystem system)
+        public void PostInitSystem_Add(IEcsSystem system)
         {
             postInitSystems.Add(system);
         }
 
-        public void AddPreFrameSystem(IEcsSystem system)
+        public void PreFrameSystem_Add(IEcsSystem system)
         {
             preFrameSystems.Add(system);
         }
-        public void AddFrameSystem(IEcsSystem system)
+        public void FrameSystem_Add(IEcsSystem system)
         {
             frameSystems.Add(system);
         }
-        public void AddPostFrameSystem(IEcsSystem system)
+        public void PostFrameSystem_Add(IEcsSystem system)
         {
             postFrameSystems.Add(system);
         }
 
-        public void AddPreRenderSystem(IEcsSystem system)
+        public void PreRenderSystem_Add(IEcsSystem system)
         {
             preRenderSystems.Add(system);
         }
-        public void AddPreRenderSystemGroup(
+        public void PreRenderSystem_AddGroup(
             string groupName,
             bool defaultState,
             params IEcsSystem[] systems)
@@ -280,29 +280,29 @@ namespace GBB
                 null,
                 systems);
         }
-        public void AddRenderSystem(IEcsSystem system)
+        public void RenderSystem_Add(IEcsSystem system)
         {
             renderSystems.Add(system);
         }
-        public void AddPostRenderSystem(IEcsSystem system)
+        public void PostRenderSystem_Add(IEcsSystem system)
         {
             postRenderSystems.Add(system);
         }
 
-        public void AddPreTickSystem(IEcsSystem system)
+        public void PreTickSystem_Add(IEcsSystem system)
         {
             preTickSystems.Add(system);
         }
-        public void AddTickSystem(IEcsSystem system)
+        public void TickSystem_Add(IEcsSystem system)
         {
             tickSystems.Add(system);
         }
-        public void AddPostTickSystem(IEcsSystem system)
+        public void PostTickSystem_Add(IEcsSystem system)
         {
             postTickSystems.Add(system);
         }
 
-        public GameObject AddDataObject()
+        public GameObject DataObject_Add()
         {
             //Создаём новый объект для компонента данных
             GameObject newDataObject = new GameObject();
@@ -314,7 +314,7 @@ namespace GBB
             return newDataObject;
         }
 
-        public void InjectData(params object[] injects)
+        public void Data_Inject(params object[] injects)
         {
             preInitSystems.Inject(injects);
             initSystems.Inject(injects);

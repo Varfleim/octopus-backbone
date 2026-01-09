@@ -7,23 +7,23 @@ namespace GBB
     {
         public GameSubmodule[] submodules;
 
-        public void AddSubmodulesSystems(GameStartup startup)
+        public void Submodules_AddSystems(GameStartup startup)
         {
             //Для каждого подмодуля
             for (int a = 0; a < submodules.Length; a++)
             {
                 //Добавляем системы
-                submodules[a].AddSystems(startup);
+                submodules[a].Systems_Add(startup);
             }
         }
 
-        public void InjectSubmodulesData(GameStartup startup)
+        public void Submodules_InjectData(GameStartup startup)
         {
             //Для каждого подмодуля
             for (int a = 0; a < submodules.Length; a++)
             {
                 //Заносим данные
-                submodules[a].InjectData(startup);
+                submodules[a].Data_Inject(startup);
             }
         }
     }
