@@ -21,51 +21,48 @@ namespace GBB.Map.Render
             Maps_Activation();
         }
 
-        readonly EcsFilterInject<Inc<R_Map_Activation>> map_Activation_R_F = default;
-        readonly EcsPoolInject<R_Map_Activation> map_Activation_R_P = default;
+        readonly EcsFilterInject<Inc<C_Map, SR_Map_Activation>> map_Activation_R_F = default;
         void Maps_Activation()
         {
             //Для каждого запроса активации карты
-            foreach(int requestEntity in map_Activation_R_F.Value)
+            foreach(int mEntity in map_Activation_R_F.Value)
             {
                 //Берём запрос
-                ref R_Map_Activation requestComp = ref map_Activation_R_P.Value.Get(requestEntity);
+                ref SR_Map_Activation rComp = ref map_Activation_R_F.Pools.Inc2.Get(mEntity);
 
-                //Если текущая активная карта была деактивирована
-                if(Map_DeactivationCheck(ref requestComp))
+                //Если запрошенная карта не была активна
+                if(Map_DeactivationCheck(mEntity))
                 {
                     //Активируем запрошенную карту
-                    Map_Activation(ref requestComp);
+                    Map_Activation(mEntity);
                 }
 
                 //Удаляем запрос
-                map_Activation_R_P.Value.Del(requestEntity);
+                map_Activation_R_F.Pools.Inc2.Del(mEntity);
             }
         }
 
-        readonly EcsFilterInject<Inc<C_ProvinceRender>> pR_F = default;
+        readonly EcsFilterInject<Inc<C_ProvinceCore, C_ProvinceRender>> pR_F = default;
         /// <summary>
         /// Возвращает False, если запрошенная карта уже активна, то есть её не требуется деактивировать
         /// </summary>
-        /// <param name="requestComp"></param>
+        /// /// <param name="mEntity"></param>
         /// <returns></returns>
         bool Map_DeactivationCheck(
-            ref R_Map_Activation requestComp)
+            int mEntity)
         {
             //Если активна не та карта, которую требуется активировать
-            if(mapRender_Data.Value.ActiveMapPE.EqualsTo(requestComp.mapPE) == false)
+            if(mapRender_Data.Value.ActiveMapEntity != mEntity)
             {
                 //Для каждой провинции с компонентом PR
-                foreach(int provinceEntity in pR_F.Value)
+                foreach(int pEntity in pR_F.Value)
                 {
-                    //Берём компонент PR
-
-                    //Удаляем компонент с провинции
-                    pR_P.Value.Del(provinceEntity);
+                    //Удаляем компонент рендеринга с провинции
+                    pR_F.Pools.Inc2.Del(pEntity);
                 }
 
-                //Удаляем PE активной карты
-                mapRender_Data.Value.ActiveMapPE = new();
+                //Удаляем сущность активной карты
+                mapRender_Data.Value.ActiveMapEntity = -1;
 
                 //Возвращаем, что карта деактивирована
                 return true;
@@ -76,14 +73,13 @@ namespace GBB.Map.Render
 
         readonly EcsPoolInject<C_Map> map_P = default;
         void Map_Activation(
-            ref R_Map_Activation requestComp)
+            int mEntity)
         {
             //Берём запрошенную карту
-            requestComp.mapPE.Unpack(world.Value, out int mapEntity);
-            ref C_Map map = ref map_P.Value.Get(mapEntity);
+            ref C_Map map = ref map_P.Value.Get(mEntity);
 
-            //Сохраняем PE карты как активной
-            mapRender_Data.Value.ActiveMapPE = world.Value.PackEntity(mapEntity);
+            //Отмечаем её как активную
+            mapRender_Data.Value.ActiveMapEntity = mEntity;
 
             //Для каждой провинции карты
             for (int a = 0; a < map.provinceEntities.Length; a++)
@@ -95,29 +91,33 @@ namespace GBB.Map.Render
                 pR = new(0);
             }
 
-            //Запрашиваем инициализацию карты
-            Map_RenderInitialization_Request();
+            //Запрашиваем инициализацию рендера карты
+            Map_RenderInitialization_Request(mEntity);
 
             //Запрашиваем активацию стандартного режима карты
             MapMode_Default_Activation();
         }
 
-        readonly EcsPoolInject<R_Map_RenderInitialization> map_RenderInitialization_R_P = default;
-        void Map_RenderInitialization_Request()
+        readonly EcsPoolInject<SR_Map_RenderInitialization> map_RenderInitialization_R_P = default;
+        void Map_RenderInitialization_Request(
+            int mEntity)
         {
-            //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.Value.NewEntity();
-            ref R_Map_RenderInitialization requestComp = ref map_RenderInitialization_R_P.Value.Add(requestEntity);
+            //Если у сущности ещё нет запроса инициализации
+            if (map_RenderInitialization_R_P.Value.Has(mEntity) == false)
+            {
+                //Назначаем переданной сущности запрос инициализации рендеринга карты
+                ref SR_Map_RenderInitialization rComp = ref map_RenderInitialization_R_P.Value.Add(mEntity);
 
-            //Заполняем данные запроса
-            requestComp = new(0);
+                //Заполняем данные запроса
+                rComp = new(0);
+            }
         }
 
         readonly EcsPoolInject<R_MapMode_Activation> mM_Activation_R_P = default;
         void MapMode_Default_Activation()
         {
             //Запрашиваем активацию стандартного режима карты
-            MainMapMode_Data.MapMode_Activation_Request(
+            MainMapMode_Data.MapMode_Activation_R(
                 world.Value,
                 mM_Activation_R_P.Value,
                 mainMapMode_Data.Value.DefaultMapModePE);

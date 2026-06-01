@@ -105,11 +105,11 @@ namespace GBB.Input
             if (input_Data.Value.isCameraBlocked == false)
             {
                 //Создаём новую сущность и назначаем ей запрос движения камеры
-                int requestEntity = world.Value.NewEntity();
-                ref R_Camera_Moving requestComp = ref camera_Moving_R_P.Value.Add(requestEntity);
+                int rEntity = world.Value.NewEntity();
+                ref R_Camera_Moving rComp = ref camera_Moving_R_P.Value.Add(rEntity);
 
                 //Заполняем данные запроса
-                requestComp = new R_Camera_Moving(
+                rComp = new R_Camera_Moving(
                     isHorizontal, isVertical, isZoom,
                     value);
             }

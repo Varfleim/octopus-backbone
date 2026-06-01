@@ -52,6 +52,11 @@ namespace GBB.Map.Render
 
         public override void Data_Inject(GameStartup startup)
         {
+            //ТЕСТ
+            GO_Province.provinceGOPrefab = mapRenderData.ProvinceGOPrefab;
+            GO_ProvinceHighlight.provinceHighlightPrefab = mapRenderData.ProvinceHighlightGOPrefab;
+            //ТЕСТ
+
             //Вводим данные
             startup.Data_Inject(mapRenderData);
 

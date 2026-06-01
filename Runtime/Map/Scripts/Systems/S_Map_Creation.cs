@@ -29,45 +29,30 @@ namespace GBB.Map
         void Maps_Creation()
         {
             //Для каждого запроса создания карты
-            foreach(int mapRequestEntity in map_Creation_SR_F.Value)
+            foreach(int mEntity in map_Creation_SR_F.Value)
             {
                 //Берём запрос
-                ref SR_Map_Creation requestComp = ref map_Creation_SR_P.Value.Get(mapRequestEntity);
+                ref SR_Map_Creation rComp = ref map_Creation_SR_P.Value.Get(mEntity);
 
                 //Создаём карту
                 Map_Creation(
-                    ref requestComp,
-                    mapRequestEntity);
-
-                //ТЕСТ
-                //Берём карту
-                /*ref C_Map map = ref mapPool.Value.Get(mapRequestEntity);
-
-                if (true)
-                {
-                    //Запрашиваем активацию карты
-                    MapData.MapActivationRequest(
-                        world.Value,
-                        mapActivationRPool.Value,
-                        world.Value.PackEntity(mapRequestEntity));
-                }*/
-                //ТЕСТ
+                    mEntity,
+                    ref rComp);
 
                 //Удаляем запрос
-                map_Creation_SR_P.Value.Del(mapRequestEntity);
+                map_Creation_SR_P.Value.Del(mEntity);
             }
         }
 
         void Map_Creation(
-            ref SR_Map_Creation requestComp,
-            int mapEntity)
+            int mEntity,
+            ref SR_Map_Creation rComp)
         {
             //Назначаем переданной сущности компонент карты
-            ref C_Map map = ref map_P.Value.Add(mapEntity);
+            ref C_Map m = ref map_P.Value.Add(mEntity);
 
             //Заполняем основные данные карты
-            map = new(
-                requestComp.mapName);
+            m = new(0);
         }
     }
 }

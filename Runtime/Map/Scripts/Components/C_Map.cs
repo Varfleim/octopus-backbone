@@ -4,14 +4,14 @@ namespace GBB.Map
     public struct C_Map
     {
         public C_Map(
-            string selfName)
+            int parentRenderEntity)
         {
-            this.selfName = selfName;
+            this.parentRenderEntity = parentRenderEntity;
 
             provinceEntities = new int[0];
         }
 
-        public readonly string selfName;
+        public int parentRenderEntity;
 
         public int[] provinceEntities;
 

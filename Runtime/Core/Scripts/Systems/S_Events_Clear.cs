@@ -24,10 +24,10 @@ namespace GBB.Core
         void Object_Created_Events_Clear()
         {
             //Для каждого события создания объекта
-            foreach (int eventEntity in object_Created_E_F.Value)
+            foreach (int eEntity in object_Created_E_F.Value)
             {
                 //Удаляем компонент события
-                object_Created_E_P.Value.Del(eventEntity);
+                object_Created_E_P.Value.Del(eEntity);
             }
         }
     }

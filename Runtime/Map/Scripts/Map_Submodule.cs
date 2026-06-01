@@ -15,6 +15,10 @@ namespace GBB.Map
             //Создание карт
             startup.InitSystem_Add(new S_Map_Creation());
             #endregion
+            #region PostInit
+            //Создаём основные компоненты провинций
+            startup.PostInitSystem_Add(new S_ProvinceCore_Creation());
+            #endregion
 
             //Добавляем покадровые системы
 
@@ -24,6 +28,10 @@ namespace GBB.Map
             #region PreTick
             //Создание карт
             startup.PreTickSystem_Add(new S_Map_Creation());
+            #endregion
+            #region PostTick
+            //Создаём основные компоненты провинций
+            startup.PostTickSystem_Add(new S_ProvinceCore_Creation());
             #endregion
         }
 

@@ -21,12 +21,12 @@ namespace GBB.Map.Render
         void MapMode_Active_Update_Request()
         {
             //Если есть активный режим карты
-            if(mainMapMode_Data.Value.ActiveMapModePE.Unpack(world.Value, out int activeMapModeEntity))
+            if(mainMapMode_Data.Value.ActiveMapModePE.Unpack(world.Value, out int mapModeEntity))
             {
                 //Запрашиваем обновление режима карты
-                MainMapMode_Data.MapMode_Update_Request(
+                MainMapMode_Data.MapMode_Update_R(
                     mMC_Update_SR_P.Value,
-                    activeMapModeEntity);
+                    mapModeEntity);
             }
         }
     }

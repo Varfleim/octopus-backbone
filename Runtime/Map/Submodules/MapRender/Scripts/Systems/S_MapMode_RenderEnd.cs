@@ -15,28 +15,26 @@ namespace GBB.Map.Render
             MapModes_RenderSystemsDeactivation();
         }
 
-        readonly EcsFilterInject<Inc<C_MapModeCore, SR_MapMode_Update>> mMC_Updated_F = default;
-        readonly EcsPoolInject<C_MapModeCore> mMC_P = default;
-        readonly EcsPoolInject<SR_MapMode_Update> mMC_Update_SR_P = default;
+        readonly EcsFilterInject<Inc<C_MapModeCore, SR_MapMode_Update>> mMC_Update_SR_F = default;
         readonly EcsPoolInject<EcsGroupSystemState> ecsGroupSystemState_P = default;
         void MapModes_RenderSystemsDeactivation()
         {
             //Для каждого режима карты с запросом обновления
-            foreach (int mapModeEntity in mMC_Updated_F.Value)
+            foreach (int mapModeEntity in mMC_Update_SR_F.Value)
             {
                 //Берём режим карты
-                ref C_MapModeCore mapMode = ref mMC_P.Value.Get(mapModeEntity);
+                ref C_MapModeCore mapMode = ref mMC_Update_SR_F.Pools.Inc1.Get(mapModeEntity);
 
                 //Создаём новую сущность и назначаем ей запрос переключения группы систем
                 int requestEntity = world.Value.NewEntity();
-                ref EcsGroupSystemState requestComp = ref ecsGroupSystemState_P.Value.Add(requestEntity);
+                ref EcsGroupSystemState rComp = ref ecsGroupSystemState_P.Value.Add(requestEntity);
 
                 //Заполняем данные запроса
-                requestComp.Name = mapMode.selfName;
-                requestComp.State = false;
+                rComp.Name = mapMode.selfName;
+                rComp.State = false;
 
                 //Удаляем запрос обновления режима карты
-                mMC_Update_SR_P.Value.Del(mapModeEntity);
+                mMC_Update_SR_F.Pools.Inc2.Del(mapModeEntity);
             }
         }
     }

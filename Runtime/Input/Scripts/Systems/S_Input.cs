@@ -27,13 +27,13 @@ namespace GBB.Input
         void Mouse_MapPositionChange_Requests()
         {
             //Для каждого запроса изменения положения курсора
-            foreach (int requestEntity in mouse_PositionChange_R_F.Value)
+            foreach (int rEntity in mouse_PositionChange_R_F.Value)
             {
                 //Берём запрос
-                ref R_Mouse_PositionChange requestComp = ref mouse_PositionChange_R_P.Value.Get(requestEntity);
+                ref R_Mouse_PositionChange rComp = ref mouse_PositionChange_R_P.Value.Get(rEntity);
 
                 //Обновляем положение курсора мыши
-                Mouse_MapPositionChange_Request(ref requestComp);
+                Mouse_MapPositionChange_Request(ref rComp);
 
                 //Если курсор находится над картой
                 if (input_Data.Value.isMouseOverMap == true)
@@ -58,16 +58,16 @@ namespace GBB.Input
                 }
 
                 //Удаляем запрос
-                mouse_PositionChange_R_P.Value.Del(requestEntity);
+                mouse_PositionChange_R_P.Value.Del(rEntity);
             }
         }
 
         void Mouse_MapPositionChange_Request(
-            ref R_Mouse_PositionChange requestComp)
+            ref R_Mouse_PositionChange rComp)
         {
             //Переносим данные из запроса
-            input_Data.Value.isMouseOverMap = requestComp.isMouseOverMap;
-            input_Data.Value.lastHitProvincePE = requestComp.lastHitProvincePE;
+            input_Data.Value.isMouseOverMap = rComp.isMouseOverMap;
+            input_Data.Value.lastHitProvincePE = rComp.lastHitProvincePE;
         }
     }
 }

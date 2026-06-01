@@ -38,20 +38,20 @@ namespace GBB.Map.Render
         /// <summary>
         /// Публичная функция, поскольку запрашивается режимами карты
         /// </summary>
-        /// <param name="sR_P"></param>
+        /// <param name="r_P"></param>
         /// <param name="mapModeEntity"></param>
         /// <param name="mapModeName"></param>
         /// <param name="defaultMapMode"></param>
-        public static void MapModeCore_Creation_Request(
-            EcsPool<SR_MapModeCore_Creation> sR_P,
+        public static void MapModeCore_Creation_R(
+            EcsPool<SR_MapModeCore_Creation> r_P,
             int mapModeEntity, string mapModeName,
             bool defaultMapMode)
         {
             //Назначаем сущности запрос создания режима карты
-            ref SR_MapModeCore_Creation requestComp = ref sR_P.Add(mapModeEntity);
+            ref SR_MapModeCore_Creation rComp = ref r_P.Add(mapModeEntity);
 
             //Заполняем данные запроса
-            requestComp = new(
+            rComp = new(
                 mapModeName,
                 defaultMapMode);
         }
@@ -63,18 +63,18 @@ namespace GBB.Map.Render
         /// <param name="r_P"></param>
         /// <param name="coloredObjectType"></param>
         /// <param name="objectColors"></param>
-        public static void MapMode_UpdateColorsListFirst_Request(
+        public static void MapMode_UpdateColorsListFirst_R(
             EcsWorld world,
             EcsPool<R_MapMode_UpdateColorsListFirst> r_P,
             string coloredObjectType,
             List<Color> objectColors)
         {
             //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.NewEntity();
-            ref R_MapMode_UpdateColorsListFirst requestComp = ref r_P.Add(requestEntity);
+            int rEntity = world.NewEntity();
+            ref R_MapMode_UpdateColorsListFirst rComp = ref r_P.Add(rEntity);
 
             //Заполняем данные запроса
-            requestComp = new(
+            rComp = new(
                 coloredObjectType,
                 objectColors);
         }
@@ -87,18 +87,18 @@ namespace GBB.Map.Render
         /// <param name="mapModePE"></param>
         /// <param name="mapModeColors"></param>
         /// <param name="defaultColor"></param>
-        public static void MapMode_UpdateColorsListSecond_Request(
+        public static void MapMode_UpdateColorsListSecond_R(
             EcsWorld world,
             EcsPool<R_MapMode_UpdateColorsListSecond> r_P,
             EcsPackedEntity mapModePE,
             List<Color> mapModeColors, Color defaultColor)
         {
             //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.NewEntity();
-            ref R_MapMode_UpdateColorsListSecond requestComp = ref r_P.Add(requestEntity);
+            int Entity = world.NewEntity();
+            ref R_MapMode_UpdateColorsListSecond rComp = ref r_P.Add(Entity);
 
             //Заполняем данные запроса
-            requestComp = new(
+            rComp = new(
                 mapModePE,
                 mapModeColors, defaultColor);
         }
@@ -109,85 +109,85 @@ namespace GBB.Map.Render
         /// <param name="world"></param>
         /// <param name="r_P"></param>
         /// <param name="mapModePE"></param>
-        public static void MapMode_Activation_Request(
+        public static void MapMode_Activation_R(
             EcsWorld world,
             EcsPool<R_MapMode_Activation> r_P,
             EcsPackedEntity mapModePE)
         {
             //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.NewEntity();
-            ref R_MapMode_Activation requestComp = ref r_P.Add(requestEntity);
+            int rEntity = world.NewEntity();
+            ref R_MapMode_Activation rComp = ref r_P.Add(rEntity);
 
             //Заполняем данные запроса
-            requestComp = new(
+            rComp = new(
                 mapModePE);
         }
 
         /// <summary>
         /// Внутренняя функция, поскольку запрашивается из подмодуля карты 
         /// </summary>
-        /// <param name="sR_P"></param>
+        /// <param name="r_P"></param>
         /// <param name="mapModeEntity"></param>
-        internal static void MapMode_Update_Request(
-            EcsPool<SR_MapMode_Update> sR_P,
+        internal static void MapMode_Update_R(
+            EcsPool<SR_MapMode_Update> r_P,
             int mapModeEntity)
         {
             //Назначаем сущности режима карты запрос 
-            ref SR_MapMode_Update requestComp = ref sR_P.Add(mapModeEntity);
+            ref SR_MapMode_Update rComp = ref r_P.Add(mapModeEntity);
 
             //Заполняем данные запроса
-            requestComp = new(0);
+            rComp = new(0);
         }
 
         /// <summary>
         /// Публичная функция, поскольку запрашивается режимами карты
         /// </summary>
-        /// <param name="sR_P"></param>
+        /// <param name="r_P"></param>
         /// <param name="targetEntity"></param>
         /// <param name="edgeIndex"></param>
-        public static void ThinEdges_Update_Request(
-            EcsPool<SR_ProvinceRender_UpdateThinEdges> sR_P,
+        public static void ThinEdges_Update_R(
+            EcsPool<SR_ProvinceRender_UpdateThinEdges> r_P,
             int targetEntity,
             int edgeIndex)
         {
             //Назначаем сущности запрос
-            ref SR_ProvinceRender_UpdateThinEdges requestComp = ref sR_P.Add(targetEntity);
+            ref SR_ProvinceRender_UpdateThinEdges rComp = ref r_P.Add(targetEntity);
 
             //Заполняем данные запроса
-            requestComp = new(
+            rComp = new(
                 edgeIndex);
         }
 
         /// <summary>
         /// Публичная функция, поскольку запрашивается режимами карты
         /// </summary>
-        /// <param name="sR_P"></param>
+        /// <param name="r_P"></param>
         /// <param name="targetEntity"></param>
         /// <param name="edgeIndex"></param>
-        public static void ThickEdges_Update_Request(
-            EcsPool<SR_ProvinceRender_UpdateThickEdges> sR_P,
+        public static void ThickEdges_Update_R(
+            EcsPool<SR_ProvinceRender_UpdateThickEdges> r_P,
             int targetEntity,
             int edgeIndex)
         {
             //Назначаем сущности запрос
-            ref SR_ProvinceRender_UpdateThickEdges requestComp = ref sR_P.Add(targetEntity);
+            ref SR_ProvinceRender_UpdateThickEdges rComp = ref r_P.Add(targetEntity);
 
             //Заполняем данные запроса
-            requestComp = new(
+            rComp = new(
                 edgeIndex);
         }
 
         /// <summary>
         /// Публичная функция, поскольку запрашивается режимами карты
         /// </summary>
-        /// <param name="sR_P"></param>
+        /// <param name="r_P"></param>
         /// <param name="mapMode"></param>
         /// <param name="targetEntity"></param>
         /// <param name="displayedObjectPE"></param>
         /// <param name="height"></param>
         /// <param name="colorIndex"></param>
-        public static void ProvinceRender_Update_Request_Full(
-           EcsPool<SR_ProvinceRender_Update> sR_P,
+        public static void ProvinceRender_Update_R_Full(
+           EcsPool<SR_ProvinceRender_Update> r_P,
            ref C_MapModeCore mapMode,
            int targetEntity,
            EcsPackedEntity displayedObjectPE,
@@ -195,50 +195,50 @@ namespace GBB.Map.Render
            int colorIndex)
         {
             //Создаём запрос
-            ProvinceRender_Update_Request_Creation(
-                sR_P,
+            ProvinceRender_Update_R_Creation(
+                r_P,
                 targetEntity);
 
             //Берём запрос
-            ref SR_ProvinceRender_Update requestComp = ref sR_P.Get(targetEntity);
+            ref SR_ProvinceRender_Update rComp = ref r_P.Get(targetEntity);
 
             //Заполняем запрос
-            ProvinceRender_Update_Request_Update(
+            ProvinceRender_Update_R_Update(
                 ref mapMode,
-                ref requestComp,
+                ref rComp,
                 displayedObjectPE, height, colorIndex);
         }
 
         /// <summary>
         /// Публичная функция, поскольку запрашивается режимами карты
         /// </summary>
-        /// <param name="sR_P"></param>
+        /// <param name="r_P"></param>
         /// <param name="targetEntity"></param>
-        public static void ProvinceRender_Update_Request_Creation(
-            EcsPool<SR_ProvinceRender_Update> sR_P,
+        public static void ProvinceRender_Update_R_Creation(
+            EcsPool<SR_ProvinceRender_Update> r_P,
             int targetEntity)
         {
             //Назначаем сущности запрос
-            ref SR_ProvinceRender_Update requestComp = ref sR_P.Add(targetEntity);
+            ref SR_ProvinceRender_Update rComp = ref r_P.Add(targetEntity);
         }
 
         /// <summary>
         /// Публичная функция, поскольку запрашивается режимами карты
         /// </summary>
         /// <param name="mapMode"></param>
-        /// <param name="requestComp"></param>
+        /// <param name="rComp"></param>
         /// <param name="displayedObjectPE"></param>
         /// <param name="height"></param>
         /// <param name="colorIndex"></param>
-        public static void ProvinceRender_Update_Request_Update(
+        public static void ProvinceRender_Update_R_Update(
             ref C_MapModeCore mapMode,
-            ref SR_ProvinceRender_Update requestComp,
+            ref SR_ProvinceRender_Update rComp,
             EcsPackedEntity displayedObjectPE,
             float height,
             int colorIndex)
         {
             //Заполняем данные запроса
-            requestComp = new(
+            rComp = new(
                 displayedObjectPE,
                 height,
                 colorIndex);
@@ -247,19 +247,23 @@ namespace GBB.Map.Render
         /// <summary>
         /// Публичная функция, поскольку запрашивается режимами карты
         /// </summary>
-        /// <param name="sR_P"></param>
+        /// <param name="r_P"></param>
         /// <param name="mapMode"></param>
         /// <param name="targetEntity"></param>
-        public static void ProvinceHoverHighlight_Show_Request(
-            EcsPool<SR_ProvinceHoverHighlight_Show> sR_P,
-            ref C_MapModeCore mapMode,
-            int targetEntity)
+        public static void ProvinceHoverHighlight_Show_R(
+            int targetEntity,
+            EcsPool<SR_ProvinceHoverHighlight_Show> r_P,
+            ref C_MapModeCore mapMode)
         {
-            //Назначаем сущности запрос
-            ref SR_ProvinceHoverHighlight_Show requestComp = ref sR_P.Add(targetEntity);
+            //Если у сущности ещё нет запроса отображения подсветки наведения
+            if(r_P.Has(targetEntity) == false)
+            {
+                //Назначаем переданной сущности запрос отображения
+                ref SR_ProvinceHoverHighlight_Show rComp = ref r_P.Add(targetEntity);
 
-            //Заполняем данные запроса
-            requestComp = new(0);
+                //Заполняем данные запроса
+                rComp = new(0);
+            }
         }
     }
 }

@@ -7,18 +7,18 @@ namespace GBB.Map.Render
 {
     public class MapRender_Data : MonoBehaviour
     {
-        public EcsPackedEntity ActiveMapPE
+        public int ActiveMapEntity
         {
             get
             {
-                return activeMapPE;
+                return activeMapEntity;
             }
             internal set
             {
-                activeMapPE = value;
+                activeMapEntity = value;
             }
         }
-        private EcsPackedEntity activeMapPE;
+        private int activeMapEntity = -1;
 
         public float MapPanelAltitude
         {
@@ -64,18 +64,19 @@ namespace GBB.Map.Render
         /// <param name="world"></param>
         /// <param name="r_P"></param>
         /// <param name="mapPE"></param>
-        public static void Map_Activation_Request(
-            EcsWorld world,
-            EcsPool<R_Map_Activation> r_P,
-            EcsPackedEntity mapPE)
+        public static void Map_Activation_SR(
+            int mEntity,
+            EcsPool<SR_Map_Activation> r_P)
         {
-            //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.NewEntity();
-            ref R_Map_Activation requestComp = ref r_P.Add(requestEntity);
+            //Если у сущности ещё нет запроса активации
+            if(r_P.Has(mEntity) == false)
+            {
+                //Назначаем переданной сущности запрос активации карты
+                ref SR_Map_Activation rComp = ref r_P.Add(mEntity);
 
-            //Заполняем данные запроса
-            requestComp = new(
-                mapPE);
+                //Заполняем данные запроса
+                rComp = new(0);
+            }
         }
 
         /// <summary>

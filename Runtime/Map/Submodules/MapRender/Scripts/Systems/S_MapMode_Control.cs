@@ -25,33 +25,33 @@ namespace GBB.Map.Render
         void MapModes_Activation()
         {
             //Для каждого запроса активации режима карты
-            foreach(int requestEntity in mM_Activation_R_F.Value)
+            foreach(int rEntity in mM_Activation_R_F.Value)
             {
                 //Берём запрос
-                ref R_MapMode_Activation requestComp = ref mM_Activation_R_P.Value.Get(requestEntity);
+                ref R_MapMode_Activation rComp = ref mM_Activation_R_P.Value.Get(rEntity);
 
                 //Если текущий активный режим карты был деактивирован
-                if(MapMode_DeactivationCheck(ref requestComp))
+                if(MapMode_DeactivationCheck(ref rComp))
                 {
                     //Активируем режим карты
-                    MapMode_Activation(ref requestComp);
+                    MapMode_Activation(ref rComp);
                 }
 
                 //Удаляем запрос
-                mM_Activation_R_P.Value.Del(requestEntity);
+                mM_Activation_R_P.Value.Del(rEntity);
             }
         }
 
         /// <summary>
         /// Возвращает False, если запрошенный режим карты уже активен, то есть его не требуется деактивировать
         /// </summary>
-        /// <param name="requestComp"></param>
+        /// <param name="rComp"></param>
         /// <returns></returns>
         bool MapMode_DeactivationCheck(
-            ref R_MapMode_Activation requestComp)
+            ref R_MapMode_Activation rComp)
         {
             //Если активен не тот режим карты, который требуется активировать
-            if(mainMapMode_Data.Value.ActiveMapModePE.EqualsTo(requestComp.mapModePE) == false)
+            if(mainMapMode_Data.Value.ActiveMapModePE.EqualsTo(rComp.mapModePE) == false)
             {
                 //Удаляем PE активного режима
                 mainMapMode_Data.Value.ActiveMapModePE = new();
@@ -66,10 +66,10 @@ namespace GBB.Map.Render
         readonly EcsPoolInject<C_MapModeCore> mMC_P = default;
         readonly EcsPoolInject<R_Map_UpdateProvincesRender> map_UpdatePR_R_P = default;
         void MapMode_Activation(
-            ref R_MapMode_Activation requestComp)
+            ref R_MapMode_Activation rComp)
         {
             //Берём запрошенный режим карты
-            requestComp.mapModePE.Unpack(world.Value, out int mapModeEntity);
+            rComp.mapModePE.Unpack(world.Value, out int mapModeEntity);
             ref C_MapModeCore mapMode = ref mMC_P.Value.Get(mapModeEntity);
 
             //Сохраняем PE режима как активного
@@ -79,7 +79,7 @@ namespace GBB.Map.Render
             MapMode_UpdatesCancel();
 
             //Запрашиваем обновление режима карты
-            MainMapMode_Data.MapMode_Update_Request(
+            MainMapMode_Data.MapMode_Update_R(
                 mM_Update_SR_P.Value,
                 mapModeEntity);
 
@@ -88,6 +88,8 @@ namespace GBB.Map.Render
                 world.Value,
                 map_UpdatePR_R_P.Value,
                 true, false, false);
+
+            UnityEngine.Debug.LogWarning(mapMode.selfName);
         }
 
         readonly EcsFilterInject<Inc<SR_MapMode_Update>> mM_Update_SR_F = default;
