@@ -35,6 +35,15 @@ namespace GBB.Map
             #endregion
         }
 
+        public override void Aspects_Add(
+            GameStartup startup,
+            A_Aspect parentAspect)
+        {
+            //—оздаЄм аспекты и присоедин€ем их к родительскому
+            A_Map map_A = new();
+            parentAspect.childrenAspects.Add(map_A);
+        }
+
         public override void Data_Inject(GameStartup startup)
         {
             //¬водим данные

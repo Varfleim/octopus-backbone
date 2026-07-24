@@ -3,24 +3,24 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Leopotam.EcsLite;
+using Leopotam.EcsProto;
 
 namespace GBB.Map.Render
 {
     public readonly struct R_MapMode_UpdateColorsListSecond
     {
         public R_MapMode_UpdateColorsListSecond(
-            EcsPackedEntity mapModePE, 
+            ProtoEntity mMEntity, 
             List<Color> mapModeColors, Color defaultColor)
         {
-            this.mapModePE = mapModePE;
+            this.mMEntity = mMEntity;
             
             this.mapModeColors = mapModeColors;
 
             this.defaultColor = defaultColor;
         }
 
-        public readonly EcsPackedEntity mapModePE;
+        public readonly ProtoEntity mMEntity;
 
         public readonly List<Color> mapModeColors;
 

@@ -1,5 +1,5 @@
 
-using Leopotam.EcsLite;
+using Leopotam.EcsProto;
 
 namespace GBB.Map.Render
 {
@@ -22,7 +22,7 @@ namespace GBB.Map.Render
             provinceGO = null;
         }
 
-        public EcsPackedEntity DisplayedObjectPE 
+        public ProtoEntity DisplayedObjectPE 
         {
             get
             {
@@ -33,7 +33,7 @@ namespace GBB.Map.Render
                 displayedObjectPE = value;
             }
         }
-        EcsPackedEntity displayedObjectPE;
+        ProtoEntity displayedObjectPE;
 
         public int ThinEdgesIndex
         {

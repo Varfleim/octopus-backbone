@@ -1,16 +1,16 @@
 
-using Leopotam.EcsLite;
+using Leopotam.EcsProto;
 
 namespace GBB.Map.Render
 {
     public struct R_MapMode_Activation
     {
         public R_MapMode_Activation(
-            EcsPackedEntity mapModePE)
+            ProtoEntity mMEntity)
         {
-            this.mapModePE = mapModePE;
+            this.mMEntity = mMEntity;
         }
 
-        public readonly EcsPackedEntity mapModePE;
+        public readonly ProtoEntity mMEntity;
     }
 }

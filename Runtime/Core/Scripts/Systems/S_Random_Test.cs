@@ -1,18 +1,19 @@
 
 using UnityEngine;
 
-using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
+using Leopotam.EcsProto;
+using Leopotam.EcsProto.QoL;
 
 namespace GBB.Core
 {
-    public class S_Random_Test : IEcsInitSystem
+    public class S_Random_Test : IProtoInitSystem
     {
-        readonly EcsCustomInject<Core_Data> core_Data = default;
+        [DI] Core_Data core_Data;
 
-        public void Init(IEcsSystems systems)
+        public void Init(IProtoSystems systems)
         {
-            Random.InitState(core_Data.Value.Seed);
+            Random.InitState(core_Data.Seed);
+            Debug.LogError(Random.value);
         }
     }
 }

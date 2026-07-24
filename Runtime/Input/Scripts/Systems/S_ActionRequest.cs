@@ -1,6 +1,6 @@
 
-using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
+using Leopotam.EcsProto;
+using Leopotam.EcsProto.QoL;
 
 namespace GBB.Input
 {
@@ -14,13 +14,13 @@ namespace GBB.Input
         CameraZoomOut
     }
 
-    public class S_ActionRequest : IEcsRunSystem
+    public class S_ActionRequest : IProtoRunSystem
     {
-        readonly EcsWorldInject world = default;
+        [DI] A_Input input_A;
 
-        readonly EcsCustomInject<Input_Data> input_Data = default;
+        [DI] Input_Data input_Data;
 
-        public void Run(IEcsSystems systems)
+        public void Run()
         {
             //Проверяем клавиши, связанные с нампадом
             Keypad_ActionRequests();
@@ -28,32 +28,32 @@ namespace GBB.Input
 
         void Keypad_ActionRequests()
         {
-            if (input_Data.Value.rightArrowKeyPressed == true)
+            if (input_Data.rightArrowKeyPressed == true)
             {
                 CheckActionType(ActionType.CameraRight);
             }
 
-            if (input_Data.Value.leftArrowKeyPressed == true)
+            if (input_Data.leftArrowKeyPressed == true)
             {
                 CheckActionType(ActionType.CameraLeft);
             }
 
-            if (input_Data.Value.upArrowKeyPressed == true)
+            if (input_Data.upArrowKeyPressed == true)
             {
                 CheckActionType(ActionType.CameraUp);
             }
 
-            if (input_Data.Value.downArrowKeyPressed == true)
+            if (input_Data.downArrowKeyPressed == true)
             {
                 CheckActionType(ActionType.CameraDown);
             }
 
-            if (input_Data.Value.keypadPlusPressed == true)
+            if (input_Data.keypadPlusPressed == true)
             {
                 CheckActionType(ActionType.CameraZoomIn);
             }
 
-            if (input_Data.Value.keypadMinusPressed == true)
+            if (input_Data.keypadMinusPressed == true)
             {
                 CheckActionType(ActionType.CameraZoomOut);
             }
@@ -96,17 +96,15 @@ namespace GBB.Input
             }
         }
 
-        readonly EcsPoolInject<R_Camera_Moving> camera_Moving_R_P = default;
         void Camera_Moving_Request(
             bool isHorizontal, bool isVertical, bool isZoom,
             float value)
         {
             //Если камера не заблокирована
-            if (input_Data.Value.isCameraBlocked == false)
+            if (input_Data.isCameraBlocked == false)
             {
                 //Создаём новую сущность и назначаем ей запрос движения камеры
-                int rEntity = world.Value.NewEntity();
-                ref R_Camera_Moving rComp = ref camera_Moving_R_P.Value.Add(rEntity);
+                ref R_Camera_Moving rComp = ref input_A.camera_Moving_R_P.NewEntity(out ProtoEntity rEntity);
 
                 //Заполняем данные запроса
                 rComp = new R_Camera_Moving(

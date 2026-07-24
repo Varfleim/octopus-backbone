@@ -1,34 +1,18 @@
 
-using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
+using Leopotam.EcsProto;
 
 namespace GBB.Core
 {
-    public class S_Events_Clear : IEcsInitSystem, IEcsRunSystem
+    public class S_Events_Clear : IProtoInitSystem, IProtoRunSystem
     {
-        readonly EcsFilterInject<Inc<E_Object_Created>> object_Created_E_F = default;
-        readonly EcsPoolInject<E_Object_Created> object_Created_E_P = default;
-
-        public void Init(IEcsSystems systems)
+        public void Init(IProtoSystems systems)
         {
-            //Очищаем события создания объектов
-            Object_Created_Events_Clear();
+
         }
 
-        public void Run(IEcsSystems systems)
+        public void Run()
         {
-            //Очищаем события создания объектов
-            Object_Created_Events_Clear();
-        }
 
-        void Object_Created_Events_Clear()
-        {
-            //Для каждого события создания объекта
-            foreach (int eEntity in object_Created_E_F.Value)
-            {
-                //Удаляем компонент события
-                object_Created_E_P.Value.Del(eEntity);
-            }
         }
     }
 }

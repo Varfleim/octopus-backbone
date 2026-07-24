@@ -1,45 +1,41 @@
 
-using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
+using Leopotam.EcsProto;
+using Leopotam.EcsProto.QoL;
 
 namespace GBB.Map.Render
 {
-    public class S_MapModes_UpdateColors : IEcsRunSystem
+    public class S_MapModes_UpdateColors : IProtoRunSystem
     {
-        readonly EcsWorldInject world = default;
+        [DI] A_CoreMapMode coreMapMode_A;
 
-        public void Run(IEcsSystems systems)
+        public void Run()
         {
             //Вторично обновляем списки цветов режимов карты
             MapModes_UpdateColorsListSecond();
         }
 
-        readonly EcsFilterInject<Inc<R_MapMode_UpdateColorsListSecond>> mM_UpdateColorsListSecond_R_F = default;
-        readonly EcsPoolInject<R_MapMode_UpdateColorsListSecond> mM_UpdateColorsListSecond_R_P = default;
         void MapModes_UpdateColorsListSecond()
         {
             //Для каждого запроса вторичного обновления списка цветов режима карты
-            foreach (int rEntity in mM_UpdateColorsListSecond_R_F.Value)
+            foreach (ProtoEntity rEntity in coreMapMode_A.mM_UpdateColorsListSecond_R_I)
             {
                 //Берём запрос
-                ref R_MapMode_UpdateColorsListSecond rComp = ref mM_UpdateColorsListSecond_R_P.Value.Get(rEntity);
+                ref R_MapMode_UpdateColorsListSecond rComp = ref coreMapMode_A.mM_UpdateColorsListSecond_R_P.Get(rEntity);
 
                 //Обновляем список цветов
                 MapMode_UpdateColorsList(
                     ref rComp);
 
                 //Удаляем запрос
-                mM_UpdateColorsListSecond_R_P.Value.Del(rEntity);
+                coreMapMode_A.mM_UpdateColorsListSecond_R_P.Del(rEntity);
             }
         }
 
-        readonly EcsPoolInject<C_MapModeCore> mMC_P = default;
         void MapMode_UpdateColorsList(
             ref R_MapMode_UpdateColorsListSecond rComp)
         {
             //Берём режим карты
-            rComp.mapModePE.Unpack(world.Value, out int mapModeEntity);
-            ref C_MapModeCore mapMode = ref mMC_P.Value.Get(mapModeEntity);
+            ref C_MapModeCore mapMode = ref coreMapMode_A.mMC_P.Get(rComp.mMEntity);
 
             //Очищаем список цветов режима карты
             mapMode.colors.Clear();

@@ -1,16 +1,16 @@
 
-using Leopotam.EcsLite;
+using Leopotam.EcsProto.QoL;
 
 namespace GBB.Input
 {
     public readonly struct R_Mouse_MapPositionCheck
     {
         public R_Mouse_MapPositionCheck(
-            EcsPackedEntity currentProvincePE)
+            ProtoPackedEntity currentProvincePE)
         {
             this.currentProvincePE = currentProvincePE;
         }
 
-        public readonly EcsPackedEntity currentProvincePE;
+        public readonly ProtoPackedEntity currentProvincePE;
     }
 }

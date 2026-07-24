@@ -1,34 +1,27 @@
 
-using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
+using Leopotam.EcsProto;
+using Leopotam.EcsProto.QoL;
 
 namespace GBB.Map.Render
 {
-    public class S_MapMode_Control : IEcsRunSystem
+    public class S_MapMode_Control : IProtoRunSystem
     {
-        readonly EcsWorldInject world = default;
+        [DI] A_MapRender mapRender_A;
+        [DI] A_CoreMapMode coreMapMode_A;
 
-
-        readonly EcsPoolInject<SR_MapMode_Update> mM_Update_SR_P = default;
-
-
-        readonly EcsCustomInject<MainMapMode_Data> mainMapMode_Data = default;
-
-        public void Run(IEcsSystems systems)
+        public void Run()
         {
             //Активируем режим карты по запросу
             MapModes_Activation();
         }
 
-        readonly EcsFilterInject<Inc<R_MapMode_Activation>> mM_Activation_R_F = default;
-        readonly EcsPoolInject<R_MapMode_Activation> mM_Activation_R_P = default;
         void MapModes_Activation()
         {
             //Для каждого запроса активации режима карты
-            foreach(int rEntity in mM_Activation_R_F.Value)
+            foreach(ProtoEntity rEntity in coreMapMode_A.mM_Activation_R_I)
             {
                 //Берём запрос
-                ref R_MapMode_Activation rComp = ref mM_Activation_R_P.Value.Get(rEntity);
+                ref R_MapMode_Activation rComp = ref coreMapMode_A.mM_Activation_R_P.Get(rEntity);
 
                 //Если текущий активный режим карты был деактивирован
                 if(MapMode_DeactivationCheck(ref rComp))
@@ -38,7 +31,7 @@ namespace GBB.Map.Render
                 }
 
                 //Удаляем запрос
-                mM_Activation_R_P.Value.Del(rEntity);
+                coreMapMode_A.mM_Activation_R_P.Del(rEntity);
             }
         }
 
@@ -50,59 +43,58 @@ namespace GBB.Map.Render
         bool MapMode_DeactivationCheck(
             ref R_MapMode_Activation rComp)
         {
-            //Если активен не тот режим карты, который требуется активировать
-            if(mainMapMode_Data.Value.ActiveMapModePE.EqualsTo(rComp.mapModePE) == false)
+            //Для каждого активного режима карты
+            foreach(ProtoEntity activeMMEntity in coreMapMode_A.activeMM_I)
             {
-                //Удаляем PE активного режима
-                mainMapMode_Data.Value.ActiveMapModePE = new();
+                //Если это не запрошенный режим карты
+                if(activeMMEntity.Equals(rComp.mMEntity) == false)
+                {
+                    //Деактивируем его, удаляя временный компонент
+                    coreMapMode_A.activeMM_P.Del(activeMMEntity);
 
-                //Возвращаем, что режим карты деактивирован
-                return true;
+                    //Возвращаем, что режим деактивирован
+                    return true;
+                }
+                //Иначе возвращаем, что режим карты уже активен
+                else
+                {
+                    return false;
+                }
             }
 
-            return false;
+            return true;
         }
 
-        readonly EcsPoolInject<C_MapModeCore> mMC_P = default;
-        readonly EcsPoolInject<R_Map_UpdateProvincesRender> map_UpdatePR_R_P = default;
         void MapMode_Activation(
             ref R_MapMode_Activation rComp)
         {
-            //Берём запрошенный режим карты
-            rComp.mapModePE.Unpack(world.Value, out int mapModeEntity);
-            ref C_MapModeCore mapMode = ref mMC_P.Value.Get(mapModeEntity);
-
-            //Сохраняем PE режима как активного
-            mainMapMode_Data.Value.ActiveMapModePE = world.Value.PackEntity(mapModeEntity);
+            //Берём запрошенный режим карты и назначаем ему компонент активного
+            ref C_MapModeCore mapMode = ref coreMapMode_A.mMC_P.Get(rComp.mMEntity);
+            ref CT_ActiveMapMode activeMM = ref coreMapMode_A.activeMM_P.Add(rComp.mMEntity);
 
             //Отменяем все запросы обновления режимов карты
             MapMode_UpdatesCancel();
 
             //Запрашиваем обновление режима карты
-            MainMapMode_Data.MapMode_Update_R(
-                mM_Update_SR_P.Value,
-                mapModeEntity);
+            coreMapMode_A.MapMode_Update_SR(rComp.mMEntity);
 
             //Запрашиваем обновление провинций карты
-            MapRender_Data.Map_UpdateProvincesRender_Request(
-                world.Value,
-                map_UpdatePR_R_P.Value,
+            mapRender_A.Map_UpdateProvincesRender_R(
                 true, false, false);
 
             UnityEngine.Debug.LogWarning(mapMode.selfName);
         }
 
-        readonly EcsFilterInject<Inc<SR_MapMode_Update>> mM_Update_SR_F = default;
         /// <summary>
         /// Удаление всех существующих запросов обновления режима карты
         /// </summary>
         void MapMode_UpdatesCancel()
         {
             //Для каждого запроса обновления режима карты
-            foreach(int mapModeEntity in mM_Update_SR_F.Value)
+            foreach(ProtoEntity mMEntity in coreMapMode_A.mM_Update_SR_I)
             {
                 //Удаляем запрос
-                mM_Update_SR_P.Value.Del(mapModeEntity);
+                coreMapMode_A.mM_Update_SR_P.Del(mMEntity);
             }
         }
     }

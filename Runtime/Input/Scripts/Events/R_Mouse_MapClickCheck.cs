@@ -1,12 +1,12 @@
 
-using Leopotam.EcsLite;
+using Leopotam.EcsProto.QoL;
 
 namespace GBB.Input
 {
     public readonly struct R_Mouse_MapClickCheck
     {
         public R_Mouse_MapClickCheck(
-            EcsPackedEntity currentProvincePE,
+            ProtoPackedEntity currentProvincePE,
             bool leftMouseButtonClick, bool rightMouseButtonClick)
         {
             this.currentProvincePE = currentProvincePE;
@@ -15,7 +15,7 @@ namespace GBB.Input
             this.rightMouseButtonClick = rightMouseButtonClick;
         }
 
-        public readonly EcsPackedEntity currentProvincePE;
+        public readonly ProtoPackedEntity currentProvincePE;
 
         public readonly bool leftMouseButtonClick;
         public readonly bool rightMouseButtonClick;

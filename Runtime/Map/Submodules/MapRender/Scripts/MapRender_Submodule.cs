@@ -27,8 +27,6 @@ namespace GBB.Map.Render
 
             //Управление режимами карты
             startup.PreRenderSystem_Add(new S_MapMode_Control());
-            //Включение группы систем визуализации режимов карты
-            startup.PreRenderSystem_Add(new S_MapMode_RenderStart());
             #endregion
             #region Render
             //Обновление цветов режимов карты
@@ -37,17 +35,21 @@ namespace GBB.Map.Render
             #region PostRender
             //Изменение параметров рендера карты
             startup.PostRenderSystem_Add(new S_Map_Render());
-
-            //Выключение группы систем визуализации режима карты
-            startup.PostRenderSystem_Add(new S_MapMode_RenderEnd());
             #endregion
 
             //Добавляем потиковые системы
-            #region PostTick
-            //Запрос обновления активного режима карты
-            startup.PostTickSystem_Add(new S_MapMode_Update());
-            #endregion
 
+        }
+
+        public override void Aspects_Add(
+            GameStartup startup,
+            A_Aspect parentAspect)
+        {
+            //Создаём аспекты и присоединяем их к родительскому
+            A_MapRender mapRender_A = new();
+            parentAspect.childrenAspects.Add(mapRender_A);
+            A_CoreMapMode coreMapMode_A = new();
+            parentAspect.childrenAspects.Add(coreMapMode_A);
         }
 
         public override void Data_Inject(GameStartup startup)

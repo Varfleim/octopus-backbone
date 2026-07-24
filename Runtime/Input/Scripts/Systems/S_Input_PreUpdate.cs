@@ -1,14 +1,14 @@
 
-using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
+using Leopotam.EcsProto;
+using Leopotam.EcsProto.QoL;
 
 namespace GBB.Input
 {
-    public class S_Input_PreUpdate : IEcsRunSystem
+    public class S_Input_PreUpdate : IProtoRunSystem
     {
-        readonly EcsCustomInject<Input_Data> input_Data = default;
+        [DI] Input_Data input_Data;
 
-        public void Run(IEcsSystems systems)
+        public void Run()
         {
             //Обновляем состояние кнопок мыши
             MouseButtons_Update();
@@ -17,14 +17,14 @@ namespace GBB.Input
         void MouseButtons_Update()
         {
             //Определяем состояние ЛКМ
-            input_Data.Value.leftMouseButtonClick = UnityEngine.Input.GetMouseButtonDown(0);
-            input_Data.Value.leftMouseButtonPressed = input_Data.Value.leftMouseButtonClick || UnityEngine.Input.GetMouseButton(0);
-            input_Data.Value.leftMouseButtonRelease = UnityEngine.Input.GetMouseButtonUp(0);
+            input_Data.leftMouseButtonClick = UnityEngine.Input.GetMouseButtonDown(0);
+            input_Data.leftMouseButtonPressed = input_Data.leftMouseButtonClick || UnityEngine.Input.GetMouseButton(0);
+            input_Data.leftMouseButtonRelease = UnityEngine.Input.GetMouseButtonUp(0);
 
             //Определяем состояние ПКМ
-            input_Data.Value.rightMouseButtonClick = UnityEngine.Input.GetMouseButtonDown(1);
-            input_Data.Value.rightMouseButtonPressed = input_Data.Value.leftMouseButtonClick || UnityEngine.Input.GetMouseButton(1);
-            input_Data.Value.rightMouseButtonRelease = UnityEngine.Input.GetMouseButtonUp(1);
+            input_Data.rightMouseButtonClick = UnityEngine.Input.GetMouseButtonDown(1);
+            input_Data.rightMouseButtonPressed = input_Data.leftMouseButtonClick || UnityEngine.Input.GetMouseButton(1);
+            input_Data.rightMouseButtonRelease = UnityEngine.Input.GetMouseButtonUp(1);
         }
     }
 }

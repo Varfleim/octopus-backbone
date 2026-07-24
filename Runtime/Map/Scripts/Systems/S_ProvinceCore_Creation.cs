@@ -1,44 +1,41 @@
 
 using System.Collections.Generic;
 
-using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
+using Leopotam.EcsProto;
+using Leopotam.EcsProto.QoL;
 
 namespace GBB.Map
 {
-    public class S_ProvinceCore_Creation : IEcsInitSystem, IEcsRunSystem
+    public class S_ProvinceCore_Creation : IProtoInitSystem, IProtoRunSystem
     {
-        readonly EcsPoolInject<C_Map> map_P = default;
+        [DI] A_Map map_A;
 
-        readonly EcsPoolInject<C_ProvinceCore> pC_P = default;
-
-        public void Init(IEcsSystems systems)
+        public void Init(IProtoSystems systems)
         {
             //Создаём PC
             PCs_Creation();
         }
         
-        public void Run(IEcsSystems systems)
+        public void Run()
         {
             //Создаём PC
             PCs_Creation();
         }
 
-        readonly EcsFilterInject<Inc<SR_ProvinceCore_Creation>> pC_Creation_SR_F = default;
         void PCs_Creation()
         {
             //Берём временный список из пула
-            List<int> tempNeighbourEntities = ListPool<int>.Get();
+            List<ProtoEntity> tempNeighbourEntities = ListPool<ProtoEntity>.Get();
 
             //Для каждого запроса создания PC
-            foreach (int pEntity in pC_Creation_SR_F.Value)
+            foreach (ProtoEntity pEntity in map_A.pC_Creation_SR_I)
             {
                 //Берём запрос и назначаем компонент PC
-                ref SR_ProvinceCore_Creation rComp = ref pC_Creation_SR_F.Pools.Inc1.Get(pEntity);
-                ref C_ProvinceCore pC = ref pC_P.Value.Add(pEntity);
+                ref SR_ProvinceCore_Creation rComp = ref map_A.pC_Creation_SR_P.Get(pEntity);
+                ref C_ProvinceCore pC = ref map_A.pC_P.Add(pEntity);
 
                 //Берём родительскую карту
-                ref C_Map parentM = ref map_P.Value.Get(rComp.parentMapEntity);
+                ref C_Map parentM = ref map_A.map_P.Get(rComp.parentMapEntity);
 
                 //Очищаем временный список
                 tempNeighbourEntities.Clear();
@@ -56,11 +53,11 @@ namespace GBB.Map
                     tempNeighbourEntities.ToArray());
 
                 //Удаляем запрос
-                pC_Creation_SR_F.Pools.Inc1.Del(pEntity);
+                map_A.pC_Creation_SR_P.Del(pEntity);
             }
 
             //Возвращаем список в пул
-            ListPool<int>.Add(tempNeighbourEntities);
+            ListPool<ProtoEntity>.Add(tempNeighbourEntities);
         }
     }
 }

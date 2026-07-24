@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-using Leopotam.EcsLite;
+using Leopotam.EcsProto.QoL;
 
 namespace GBB.Input
 {
@@ -17,37 +17,7 @@ namespace GBB.Input
         public bool rightMouseButtonRelease;
 
         public bool isMouseOverMap;
-        public EcsPackedEntity lastHitProvincePE;
-
-        public static void Mouse_MapPositionCheck_Request(
-            EcsWorld world,
-            EcsPool<R_Mouse_MapPositionCheck> r_P,
-            EcsPackedEntity currentProvincePE)
-        {
-            //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.NewEntity();
-            ref R_Mouse_MapPositionCheck requestComp = ref r_P.Add(requestEntity);
-
-            //Заполняем данные запроса
-            requestComp = new(
-                currentProvincePE);
-        }
-
-        public static void Mouse_MapClickCheck_Request(
-            EcsWorld world,
-            EcsPool<R_Mouse_MapClickCheck> r_P,
-            EcsPackedEntity currentProvincePE,
-            bool leftMouseButtonClick, bool rightMouseButtonClick)
-        {
-            //Создаём новую сущность и назначаем ей запрос
-            int requestEntity = world.NewEntity();
-            ref R_Mouse_MapClickCheck requestComp = ref r_P.Add(requestEntity);
-
-            //Заполняем данные запроса
-            requestComp = new(
-                currentProvincePE,
-                leftMouseButtonClick, rightMouseButtonClick);
-        }
+        public ProtoPackedEntity lastHitProvincePE;
         #endregion
 
         #region Keyboard

@@ -8,7 +8,8 @@ namespace GBB.Core
         [SerializeField]
         private Core_Data coreData;
 
-        public override void Systems_Add(GameStartup startup)
+        public override void Systems_Add(
+            GameStartup startup)
         {
             //Добавляем системы инициализации
             #region PreInit
@@ -39,7 +40,17 @@ namespace GBB.Core
             #endregion
         }
 
-        public override void Data_Inject(GameStartup startup)
+        public override void Aspects_Add(
+            GameStartup startup,
+            A_Aspect parentAspect)
+        {
+            //Создаём аспекты и присоединяем их к родительскому
+            //Aspect# = new();
+            //parentAspect.childrenAspects.Add(Aspect#);
+        }
+
+        public override void Data_Inject(
+            GameStartup startup)
         {
             //Вводим данные
             startup.Data_Inject(coreData);

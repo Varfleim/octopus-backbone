@@ -1,5 +1,5 @@
 
-using Leopotam.EcsLite;
+using Leopotam.EcsProto;
 
 namespace GBB.Map
 {
@@ -9,18 +9,18 @@ namespace GBB.Map
     public struct C_ProvinceCore
     {
         public C_ProvinceCore(
-            int parentCellEntity,
-            int[] neighbourProvinceEntities)
+            ProtoEntity parentCellEntity,
+            ProtoEntity[] neighbourProvinceEntities)
         {
             this.parentCellEntity = parentCellEntity;
 
             this.neighbourProvinceEntities = neighbourProvinceEntities;
         }
 
-        public readonly int parentCellEntity;
+        public readonly ProtoEntity parentCellEntity;
 
         #region ProvinceData
-        public readonly int[] neighbourProvinceEntities;
+        public readonly ProtoEntity[] neighbourProvinceEntities;
         #endregion
     }
 }

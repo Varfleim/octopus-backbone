@@ -3,37 +3,35 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
-using Leopotam.EcsLite.ExtendedSystems;
-using Leopotam.EcsLite.Unity.Ugui;
+using Leopotam.EcsProto;
+using Leopotam.EcsProto.QoL;
+using Leopotam.EcsProto.Unity;
+using Leopotam.EcsProto.Unity.Ugui;
+using Leopotam.EcsProto.ConditionalSystems;
 
 namespace GBB
 {
     public class GameStartup : MonoBehaviour
     {
-        EcsWorld world;
-        EcsWorld uguiMapWorld;
-        EcsWorld uguiUIWorld;
+        ProtoWorld world;
 
-        EcsSystems preInitSystems;
-        EcsSystems initSystems;
-        EcsSystems postInitSystems;
+        IProtoSystems preInitSystems;
+        IProtoSystems initSystems;
+        IProtoSystems postInitSystems;
 
-        EcsSystems preFrameSystems;
-        EcsSystems frameSystems;
-        EcsSystems postFrameSystems;
+        IProtoSystems preFrameSystems;
+        IProtoSystems frameSystems;
+        IProtoSystems postFrameSystems;
 
-        EcsSystems preRenderSystems;
-        EcsSystems renderSystems;
-        EcsSystems postRenderSystems;
+        IProtoSystems preRenderSystems;
+        IProtoSystems renderSystems;
+        IProtoSystems postRenderSystems;
 
-        EcsSystems preTickSystems;
-        EcsSystems tickSystems;
-        EcsSystems postTickSystems;
+        IProtoSystems preTickSystems;
+        IProtoSystems tickSystems;
+        IProtoSystems postTickSystems;
 
-        [SerializeField] EcsUguiEmitter uguiMapEmitter;
-        [SerializeField] EcsUguiEmitter uguiUIEmitter;
+        A_Core coreAspect;
 
         #region Map
         public GameObject coreObject;
@@ -55,26 +53,54 @@ namespace GBB
             //Инициализируем пулы списков
             ListPools_Init();
 
-            //Инициализируем мир и группы систем
-            world = new EcsWorld();
-            uguiMapWorld = new EcsWorld();
-            uguiUIWorld = new EcsWorld();
+            //Инициализируем модули
+            for(int a = 0; a < modules.Count; a++)
+            {
+                modules[a].Initialization();
+            }
 
-            preInitSystems = new EcsSystems(world);
-            initSystems = new EcsSystems(world);
-            postInitSystems = new EcsSystems(world);
+            //Инициализируем корневой аспект, мир и группы систем
+            coreAspect = new();
+            //Добавляем аспект Ugui
+            coreAspect.childrenAspects.Add(new UnityUguiAspect());
+            //Для каждого модуля добавляем аспекты
+            for (int a = 0; a < modules.Count; a++)
+            {
+                //Добавляем аспекты
+                modules[a].Submodules_Aspects_Add(this);
+                coreAspect.childrenAspects.Add(modules[a].mainAspect);
+            }
+            world = new(coreAspect);
 
-            preFrameSystems = new EcsSystems(world);
-            frameSystems = new EcsSystems(world);
-            postFrameSystems = new EcsSystems(world);
+            preInitSystems = new ProtoSystems(world);
+            preInitSystems.AddModule(new AutoInjectModule());
+            initSystems = new ProtoSystems(world);
+            initSystems.AddModule(new AutoInjectModule());
+            postInitSystems = new ProtoSystems(world);
+            postInitSystems.AddModule(new AutoInjectModule());
 
-            preRenderSystems = new EcsSystems(world);
-            renderSystems = new EcsSystems(world);
-            postRenderSystems = new EcsSystems(world);
+            preFrameSystems = new ProtoSystems(world);
+            preFrameSystems.AddModule(new AutoInjectModule());
+            frameSystems = new ProtoSystems(world);
+            frameSystems.AddModule(new AutoInjectModule());
+            frameSystems.AddModule(new UnityModule());
+            frameSystems.AddModule(new UnityUguiModule(default, 100));
+            postFrameSystems = new ProtoSystems(world);
+            postFrameSystems.AddModule(new AutoInjectModule());
 
-            preTickSystems = new EcsSystems(world);
-            tickSystems = new EcsSystems(world);
-            postTickSystems = new EcsSystems(world);
+            preRenderSystems = new ProtoSystems(world);
+            preRenderSystems.AddModule(new AutoInjectModule());
+            renderSystems = new ProtoSystems(world);
+            renderSystems.AddModule(new AutoInjectModule());
+            postRenderSystems = new ProtoSystems(world);
+            postRenderSystems.AddModule(new AutoInjectModule());
+
+            preTickSystems = new ProtoSystems(world);
+            preTickSystems.AddModule(new AutoInjectModule());
+            tickSystems = new ProtoSystems(world);
+            tickSystems.AddModule(new AutoInjectModule());
+            postTickSystems = new ProtoSystems(world);
+            postTickSystems.AddModule(new AutoInjectModule());
 
             //Инициализируем данные
             RuntimeData runtimeData = coreObject.AddComponent(typeof(RuntimeData)) as RuntimeData;
@@ -88,6 +114,8 @@ namespace GBB
                 //Добавляем системы
                 modules[a].Submodules_AddSystems(this);
             }
+
+            
 
             //Для каждого модуля вводим данные
             for (int a = 0; a < modules.Count; a++)
@@ -104,23 +132,8 @@ namespace GBB
             initSystems.Init();
             postInitSystems.Init();
 
-            //preFrameSystems
-            //    .AddWorld(uguiMapWorld, "uguiMapEventsWorld")
-            //    .InjectUgui(uguiMapEmitter, "uguiMapEventsWorld")
-            //    .AddWorld(uguiUIWorld, "uguiUIEventsWorld")
-            //    .InjectUgui(uguiUIEmitter, "uguiUIEventsWorld");
             preFrameSystems.Init();
-            frameSystems
-                .AddWorld(uguiMapWorld, "uguiMapEventsWorld")
-                .InjectUgui(uguiMapEmitter, "uguiMapEventsWorld")
-                .AddWorld(uguiUIWorld, "uguiUIEventsWorld")
-                .InjectUgui(uguiUIEmitter, "uguiUIEventsWorld");
             frameSystems.Init();
-            //postFrameSystems
-            //    .AddWorld(uguiMapWorld, "uguiMapEventsWorld")
-            //    .InjectUgui(uguiMapEmitter, "uguiMapEventsWorld")
-            //    .AddWorld(uguiUIWorld, "uguiUIEventsWorld")
-            //    .InjectUgui(uguiUIEmitter, "uguiUIEventsWorld");
             postFrameSystems.Init();
 
             preRenderSystems.Init();
@@ -239,67 +252,66 @@ namespace GBB
 
         }
 
-        public void PreInitSystem_Add(IEcsSystem system)
+        public void PreInitSystem_Add(IProtoSystem system)
         {
-            preInitSystems.Add(system);
+            preInitSystems.AddSystem(system);
         }
-        public void InitSystem_Add(IEcsSystem system)
+        public void InitSystem_Add(IProtoSystem system)
         {
-            initSystems.Add(system);
+            initSystems.AddSystem(system);
         }
-        public void PostInitSystem_Add(IEcsSystem system)
+        public void PostInitSystem_Add(IProtoSystem system)
         {
-            postInitSystems.Add(system);
-        }
-
-        public void PreFrameSystem_Add(IEcsSystem system)
-        {
-            preFrameSystems.Add(system);
-        }
-        public void FrameSystem_Add(IEcsSystem system)
-        {
-            frameSystems.Add(system);
-        }
-        public void PostFrameSystem_Add(IEcsSystem system)
-        {
-            postFrameSystems.Add(system);
+            postInitSystems.AddSystem(system);
         }
 
-        public void PreRenderSystem_Add(IEcsSystem system)
+        public void PreFrameSystem_Add(IProtoSystem system)
         {
-            preRenderSystems.Add(system);
+            preFrameSystems.AddSystem(system);
+        }
+        public void FrameSystem_Add(IProtoSystem system)
+        {
+            frameSystems.AddSystem(system);
+        }
+        public void PostFrameSystem_Add(IProtoSystem system)
+        {
+            postFrameSystems.AddSystem(system);
+        }
+
+        public void PreRenderSystem_Add(IProtoSystem system)
+        {
+            preRenderSystems.AddSystem(system);
         }
         public void PreRenderSystem_AddGroup(
-            string groupName,
-            bool defaultState,
-            params IEcsSystem[] systems)
+            IConditionalSystemSolver groupSolver,
+            params IProtoSystem[] groupSystems)
         {
-            preRenderSystems.AddGroup(
-                groupName,
-                defaultState,
-                null,
-                systems);
+            preRenderSystems.AddSystem(
+                new ConditionalSystem(
+                    groupSolver,
+                    true,
+                    groupSystems));
         }
-        public void RenderSystem_Add(IEcsSystem system)
+        public void RenderSystem_Add(IProtoSystem system)
         {
-            renderSystems.Add(system);
+            renderSystems.AddSystem(system);
         }
-        public void PostRenderSystem_Add(IEcsSystem system)
+        public void PostRenderSystem_Add(IProtoSystem system)
         {
-            postRenderSystems.Add(system);
+            postRenderSystems.AddSystem(system);
         }
 
-        public void PreTickSystem_Add(IEcsSystem system)
+        public void PreTickSystem_Add(IProtoSystem system)
         {
-            preTickSystems.Add(system);
+            preTickSystems.AddSystem(system);
         }
-        public void TickSystem_Add(IEcsSystem system)
+        public void TickSystem_Add(IProtoSystem system)
         {
-            tickSystems.Add(system);
+            tickSystems.AddSystem(system);
         }
-        public void PostTickSystem_Add(IEcsSystem system)
+        public void PostTickSystem_Add(IProtoSystem system)
         {
-            postTickSystems.Add(system);
+            postTickSystems.AddSystem(system);
         }
 
         public GameObject DataObject_Add()
@@ -314,23 +326,23 @@ namespace GBB
             return newDataObject;
         }
 
-        public void Data_Inject(params object[] injects)
+        public void Data_Inject(object inject)
         {
-            preInitSystems.Inject(injects);
-            initSystems.Inject(injects);
-            postInitSystems.Inject(injects);
+            preInitSystems.AddService(inject);
+            initSystems.AddService(inject);
+            postInitSystems.AddService(inject);
 
-            preFrameSystems.Inject(injects);
-            frameSystems.Inject(injects);
-            postFrameSystems.Inject(injects);
+            preFrameSystems.AddService(inject);
+            frameSystems.AddService(inject);
+            postFrameSystems.AddService(inject);
 
-            preRenderSystems.Inject(injects);
-            renderSystems.Inject(injects);
-            postRenderSystems.Inject(injects);
+            preRenderSystems.AddService(inject);
+            renderSystems.AddService(inject);
+            postRenderSystems.AddService(inject);
 
-            preTickSystems.Inject(injects);
-            tickSystems.Inject(injects);
-            postTickSystems.Inject(injects);
+            preTickSystems.AddService(inject);
+            tickSystems.AddService(inject);
+            postTickSystems.AddService(inject);
         }
     }
 }

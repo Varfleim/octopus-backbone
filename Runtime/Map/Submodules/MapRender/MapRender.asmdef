@@ -2,9 +2,9 @@
     "name": "MapRender",
     "rootNamespace": "GBB.Map.Render",
     "references": [
-        "GUID:e59bf9fc7d5a44b18a819a92edd46163",
-        "GUID:f5f01a091e0d746659b4380253d52f4e",
-        "GUID:e06a58708b83247ca9dc984644f5b40b",
+        "GUID:b9e4029c2cdc84f7d82433cf8a1d0e69",
+        "GUID:bd4ea46f2fdce47f0a34f0df46c013f5",
+        "GUID:75c7b8b8a762a4d6ca897e3a52280917",
         "GUID:b32bc0920a31b724eb24db2bba81b9ae",
         "GUID:e00697c326bd3c94ebab5b89eafd37cc"
     ],

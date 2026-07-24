@@ -1,5 +1,5 @@
 
-using Leopotam.EcsLite;
+using Leopotam.EcsProto.QoL;
 
 namespace GBB.Input
 {
@@ -7,7 +7,7 @@ namespace GBB.Input
     {
         public R_Mouse_PositionChange(
             bool isMouseOverMap,
-            EcsPackedEntity lastHitProvincePE)
+            ProtoPackedEntity lastHitProvincePE)
         {
             this.isMouseOverMap = isMouseOverMap;
 
@@ -16,6 +16,6 @@ namespace GBB.Input
 
         public readonly bool isMouseOverMap;
 
-        public readonly EcsPackedEntity lastHitProvincePE;
+        public readonly ProtoPackedEntity lastHitProvincePE;
     }
 }

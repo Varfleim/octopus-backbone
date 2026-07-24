@@ -1,13 +1,13 @@
 using UnityEngine;
 
-using Leopotam.EcsLite;
+using Leopotam.EcsProto.QoL;
 
 namespace GBB.Map.Render
 {
     public struct R_ProvinceMapPanel_SetParent
     {
         public R_ProvinceMapPanel_SetParent(
-            EcsPackedEntity parentProvincePE, 
+            ProtoPackedEntity parentProvincePE, 
             GameObject mapPanelGO)
         {
             this.parentProvincePE = parentProvincePE;
@@ -15,7 +15,7 @@ namespace GBB.Map.Render
             this.mapPanelGO = mapPanelGO;
         }
 
-        public readonly EcsPackedEntity parentProvincePE; 
+        public readonly ProtoPackedEntity parentProvincePE; 
 
         public readonly GameObject mapPanelGO;
     }

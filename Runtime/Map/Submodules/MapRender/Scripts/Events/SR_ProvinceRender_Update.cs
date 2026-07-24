@@ -1,23 +1,23 @@
 
-using Leopotam.EcsLite;
+using Leopotam.EcsProto;
 
 namespace GBB.Map.Render
 {
     public readonly struct SR_ProvinceRender_Update
     {
         public SR_ProvinceRender_Update(
-            EcsPackedEntity displayedObjectPE,
+            ProtoEntity displayedObjectEntity,
             float height, 
             int colorIndex)
         {
-            this.displayedObjectPE = displayedObjectPE;
+            this.displayedObjectEntity = displayedObjectEntity;
 
             this.height = height;
             
             this.colorIndex = colorIndex;
         }
 
-        public readonly EcsPackedEntity displayedObjectPE;
+        public readonly ProtoEntity displayedObjectEntity;
 
         public readonly float height;
 

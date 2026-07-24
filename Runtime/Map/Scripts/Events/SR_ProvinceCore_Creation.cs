@@ -1,11 +1,13 @@
 
+using Leopotam.EcsProto;
+
 namespace GBB.Map
 {
     public readonly struct SR_ProvinceCore_Creation
     {
         public SR_ProvinceCore_Creation(
-            int parentMapEntity,
-            int parentCellEntity, int selfIndex,
+            ProtoEntity parentMapEntity,
+            ProtoEntity parentCellEntity, int selfIndex,
             int[] neighbourProvinceEntities)
         {
             this.parentMapEntity = parentMapEntity;
@@ -16,9 +18,9 @@ namespace GBB.Map
             this.neighbourProvinceEntities = neighbourProvinceEntities;
         }
 
-        public readonly int parentMapEntity;
+        public readonly ProtoEntity parentMapEntity;
 
-        public readonly int parentCellEntity;
+        public readonly ProtoEntity parentCellEntity;
         public readonly int selfIndex;
 
         public readonly int[] neighbourProvinceEntities;

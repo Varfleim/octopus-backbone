@@ -1,14 +1,14 @@
 
-using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
+using Leopotam.EcsProto;
+using Leopotam.EcsProto.QoL;
 
 namespace GBB.Input
 {
-    public class S_Keyboard_Input : IEcsRunSystem
+    public class S_Keyboard_Input : IProtoRunSystem
     {
-        readonly EcsCustomInject<Input_Data> input_Data = default;
+        [DI] Input_Data input_Data;
 
-        public void Run(IEcsSystems systems)
+        public void Run()
         {
             //Обновляем состояние клавиш нампада
             Keypad_Update();
@@ -17,14 +17,14 @@ namespace GBB.Input
         void Keypad_Update()
         {
             //Определяем состояние клавиш стрелок
-            input_Data.Value.rightArrowKeyPressed = UnityEngine.Input.GetKey(UnityEngine.KeyCode.RightArrow);
-            input_Data.Value.leftArrowKeyPressed = UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftArrow);
-            input_Data.Value.upArrowKeyPressed = UnityEngine.Input.GetKey(UnityEngine.KeyCode.UpArrow);
-            input_Data.Value.downArrowKeyPressed = UnityEngine.Input.GetKey(UnityEngine.KeyCode.DownArrow);
+            input_Data.rightArrowKeyPressed = UnityEngine.Input.GetKey(UnityEngine.KeyCode.RightArrow);
+            input_Data.leftArrowKeyPressed = UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftArrow);
+            input_Data.upArrowKeyPressed = UnityEngine.Input.GetKey(UnityEngine.KeyCode.UpArrow);
+            input_Data.downArrowKeyPressed = UnityEngine.Input.GetKey(UnityEngine.KeyCode.DownArrow);
 
             //Определяем состояние клавиш математических символов
-            input_Data.Value.keypadPlusPressed = UnityEngine.Input.GetKey(UnityEngine.KeyCode.KeypadPlus);
-            input_Data.Value.keypadMinusPressed = UnityEngine.Input.GetKey(UnityEngine.KeyCode.KeypadMinus);
+            input_Data.keypadPlusPressed = UnityEngine.Input.GetKey(UnityEngine.KeyCode.KeypadPlus);
+            input_Data.keypadMinusPressed = UnityEngine.Input.GetKey(UnityEngine.KeyCode.KeypadMinus);
         }
     }
 }
