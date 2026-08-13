@@ -14,7 +14,7 @@ namespace GBB.Input
         CameraZoomOut
     }
 
-    public class S_ActionRequest : IProtoRunSystem
+    public class S_ActionRequest : VFSystem, IProtoRunSystem
     {
         [DI] A_Input input_A;
 

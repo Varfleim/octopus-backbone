@@ -6,7 +6,7 @@ using Leopotam.EcsProto.QoL;
 
 namespace GBB.Map
 {
-    public class S_ProvinceCore_Creation : IProtoInitSystem, IProtoRunSystem
+    public class S_ProvinceCore_Creation : VFSystem, IProtoInitSystem, IProtoRunSystem
     {
         [DI] A_Map map_A;
 

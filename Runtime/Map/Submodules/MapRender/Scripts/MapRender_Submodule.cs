@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GBB.Map.Render
 {
-    public class MapRender_Submodule : GameSubmodule
+    internal class MapRender_Submodule : GameSubmodule
     {
         [SerializeField]
         private MapRender_Data mapRenderData;
@@ -15,26 +15,32 @@ namespace GBB.Map.Render
             //Добавляем системы инициализации
             #region Init
             //Создание главных компонентов режимов карты
-            startup.InitSystem_Add(new S_MapModes_CreationMain());
+            startup.InitSystem_Add(
+                System_New<S_MapModes_CreationMain>(SystemWeight.SystemWeight));
             #endregion
 
             //Добавляем покадровые системы
 
             //Добавляем системы рендеринга
-            #region PreRender
+            #region Render
             //Управление картами
-            startup.PreRenderSystem_Add(new S_Map_Control());
+            startup.RenderSystem_Add(
+                System_New<S_Map_Control>(SystemWeight.PreSystemWeight));
 
             //Управление режимами карты
-            startup.PreRenderSystem_Add(new S_MapMode_Control());
-            #endregion
-            #region Render
+            startup.RenderSystem_Add(
+                System_New<S_MapMode_Control>(SystemWeight.PreSystemWeight));
+
             //Обновление цветов режимов карты
-            startup.RenderSystem_Add(new S_MapModes_UpdateColors());
-            #endregion
-            #region PostRender
-            //Изменение параметров рендера карты
-            startup.PostRenderSystem_Add(new S_Map_Render());
+            startup.RenderSystem_Add(
+                System_New<S_MapModes_UpdateColors>(SystemWeight.SystemWeight));
+
+            //Непосредственно рендер карты
+            startup.RenderSystem_AddGroup(
+                //Условие работы
+                new MapRender_Solver(),
+                //Изменение параметров рендера карты
+                System_New<S_Map_Render>(SystemWeight.PostSystemWeight));
             #endregion
 
             //Добавляем потиковые системы

@@ -45,6 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d9114448caa73e4e90a85a49e316a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  submodulePreSystemWeight: 9975
+  submoduleSystemWeight: 10000
+  submodulePostSystemWeight: 10025
   inputData: {fileID: 7267225515687254680}
 --- !u!114 &7267225515687254680
 MonoBehaviour:
@@ -118,6 +121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a13d1f77e8aa2a4090f2885464ea6ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  submodulePreSystemWeight: 4975
+  submoduleSystemWeight: 5000
+  submodulePostSystemWeight: 5025
   mapRenderData: {fileID: 6998709462635248907}
   mainMapModeData: {fileID: 7500772762554970621}
 --- !u!114 &6998709462635248907
@@ -246,6 +252,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 699b783450d54924e845559e3334d38a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  submodulePreSystemWeight: 975
+  submoduleSystemWeight: 1000
+  submodulePostSystemWeight: 1025
   mapData: {fileID: 5718718708203918275}
 --- !u!114 &5718718708203918275
 MonoBehaviour:
@@ -304,6 +313,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f18819142ac9440950c72fe8c4b9d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  submodulePreSystemWeight: 0
+  submoduleSystemWeight: 1
+  submodulePostSystemWeight: 25
   coreData: {fileID: 6668067146289137335}
 --- !u!114 &6668067146289137335
 MonoBehaviour:

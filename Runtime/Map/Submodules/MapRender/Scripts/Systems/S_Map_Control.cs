@@ -4,7 +4,7 @@ using Leopotam.EcsProto.QoL;
 
 namespace GBB.Map.Render
 {
-    public class S_Map_Control : IProtoRunSystem
+    public class S_Map_Control : VFSystem, IProtoRunSystem
     {
         [DI] A_Map map_A;
         [DI] A_MapRender mapRender_A;
@@ -58,6 +58,9 @@ namespace GBB.Map.Render
                     //Деактивируем её, удаляя временный компонент
                     mapRender_A.activeMap_P.Del(activeMEntity);
 
+                    //Декэшируем итераторы, поскольку они будут изменены
+                    mapRender_A.pR_I.EndCaching();
+
                     //Для каждой провинции карты
                     for (int a = 0; a < activeM.provinceEntities.Length; a++)
                     {
@@ -97,6 +100,9 @@ namespace GBB.Map.Render
                 //Заполняем данные PR
                 pR = new(0);
             }
+
+            //Кэшируем итератор PR, поскольку нигде больше он не изменяется
+            mapRender_A.pR_I.BeginCaching();
 
             //Запрашиваем инициализацию рендера карты
             Map_RenderInitialization_Request(mEntity);

@@ -13,17 +13,20 @@ namespace GBB.Input
             //ƒобавл€ем системы инициализации
 
             //ƒобавл€ем покадровые системы
-            #region PreFrame
-            //ќбновл€ем переменные, требуемые дл€ систем ввода - не завис€щие от других модулей
-            startup.PreFrameSystem_Add(new S_Input_PreUpdate());
-            //ќбрабатываем нажати€ клавиш на клавиатуре
-            startup.PreFrameSystem_Add(new S_Keyboard_Input());
-            #endregion
             #region Frame
+            //ќбновл€ем переменные, требуемые дл€ систем ввода - не завис€щие от других модулей
+            startup.FrameSystem_Add(
+                System_New<S_Input_PreUpdate>(SystemWeight.PreSystemWeight));
+            //ќбрабатываем нажати€ клавиш на клавиатуре
+            startup.FrameSystem_Add(
+                System_New<S_Keyboard_Input>(SystemWeight.PreSystemWeight));
+
             //ќбновл€ем переменные, требуемые дл€ систем ввода - завис€щие от других модулей
-            startup.FrameSystem_Add(new S_Input());
+            startup.FrameSystem_Add(
+                System_New<S_Input>(SystemWeight.SystemWeight));
             //«апрашиваем действи€ по нажати€м клавиш
-            startup.FrameSystem_Add(new S_ActionRequest());
+            startup.FrameSystem_Add(
+                System_New<S_ActionRequest>(SystemWeight.SystemWeight));
             #endregion
 
             //ƒобавл€ем системы рендеринга

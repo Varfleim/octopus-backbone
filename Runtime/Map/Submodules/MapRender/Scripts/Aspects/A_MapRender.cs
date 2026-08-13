@@ -22,7 +22,7 @@ namespace GBB.Map.Render
         public ProtoIt map_UpdateEdges_R_I = new(It.Inc<R_Map_UpdateEdges>());
 
         public ProtoPool<C_ProvinceRender> pR_P;
-        public ProtoIt pR_I = new(It.Inc<C_ProvinceCore, C_ProvinceRender>());
+        public ProtoItCached pR_I = new(It.Inc<C_ProvinceCore, C_ProvinceRender>());
 
         public ProtoPool<SR_ProvinceRender_Update> pR_Update_P;
         public ProtoIt pR_Update_I = new(It.Inc<C_ProvinceRender, SR_ProvinceRender_Update>());

@@ -4,7 +4,7 @@ using Leopotam.EcsProto.QoL;
 
 namespace GBB.Map.Render
 {
-    public class S_Map_Render : IProtoRunSystem
+    public class S_Map_Render : VFSystem, IProtoRunSystem
     {
         [DI] A_MapRender mapRender_A;
         [DI] A_CoreMapMode coreMapMode_A;

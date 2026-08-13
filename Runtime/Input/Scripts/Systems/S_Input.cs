@@ -4,7 +4,7 @@ using Leopotam.EcsProto.QoL;
 
 namespace GBB.Input
 {
-    public class S_Input : IProtoRunSystem
+    public class S_Input : VFSystem, IProtoRunSystem
     {
         [DI] A_Input input_A;
 

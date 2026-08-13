@@ -13,14 +13,25 @@ namespace GBB
 
         public abstract void Initialization();
 
-        public void Submodules_AddSystems(GameStartup startup)
+        public int Submodules_AddSystems(
+            GameStartup startup,
+            int submodulesCount)
         {
             //Для каждого подмодуля
             for (int a = 0; a < submodules.Length; a++)
             {
+                //Инициализируем подмодуль
+                submodules[a].Submodule_Initialization(submodulesCount);
+
                 //Добавляем системы
                 submodules[a].Systems_Add(startup);
+
+                //Увеличиваем счётчик подмодулей
+                submodulesCount++;
             }
+
+            //Возвращаем увеличенный счётчик
+            return submodulesCount;
         }
 
         public void Submodules_Aspects_Add(GameStartup startup)

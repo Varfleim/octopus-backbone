@@ -3,15 +3,46 @@ using UnityEngine;
 
 namespace GBB
 {
-    public abstract class GameSubmodule : MonoBehaviour
+    public class GameSubmodule : MonoBehaviour
     {
-        public abstract void Systems_Add(GameStartup startup);
+        private int submoduleIndex;
 
-        public abstract void Aspects_Add(
+        public void Submodule_Initialization(
+            int submoduleIndex)
+        {
+            this.submoduleIndex = submoduleIndex;
+        }
+
+        public virtual void Systems_Add(GameStartup startup)
+        {
+
+        }
+
+        protected T System_New<T>(
+            SystemWeight systemWeight) where T : VFSystem, new()
+        {
+            T system = new();
+
+            system.systemWeight = systemWeight;
+            system.fullName = submoduleIndex + " | " + (int)system.systemWeight + " | " + system.GetType().ToString();
+
+            system.systemSubmodule = this;
+            system.systemSubmoduleIndex = submoduleIndex;
+
+            return system;
+        }
+
+        public virtual void Aspects_Add(
             GameStartup startup,
-            A_Aspect parentAspect);
+            A_Aspect parentAspect)
+        {
 
-        public abstract void Data_Inject(GameStartup startup);
+        }
+
+        public virtual void Data_Inject(GameStartup startup)
+        {
+
+        }
 
     }
 }

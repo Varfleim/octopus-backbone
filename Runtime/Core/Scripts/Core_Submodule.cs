@@ -12,31 +12,35 @@ namespace GBB.Core
             GameStartup startup)
         {
             //Добавляем системы инициализации
-            #region PreInit
+            #region Init
             //Инициализация RNG
-            startup.PreInitSystem_Add(new S_Random_Test());
-            #endregion
-            #region PostInit
+            startup.InitSystem_Add(
+                System_New<S_Random_Test>(SystemWeight.StartSystemWeight));
+
             //Очистка событий
-            startup.PostInitSystem_Add(new S_Events_Clear());
+            startup.InitSystem_Add(
+                System_New<S_Events_Clear>(SystemWeight.EndSystemWeight));
             #endregion
 
             //Добавляем покадровые системы
-            #region PostFrame
+            #region Frame
             //Очистка событий
-            startup.PostFrameSystem_Add(new S_Events_Clear());
+            startup.FrameSystem_Add(
+                System_New<S_Events_Clear>(SystemWeight.EndSystemWeight));
             #endregion
 
             //Добавляем системы рендеринга
-            #region PostRender
+            #region Render
             //Очистка событий
-            startup.PostRenderSystem_Add(new S_Events_Clear());
+            startup.RenderSystem_Add(
+                System_New<S_Events_Clear>(SystemWeight.EndSystemWeight));
             #endregion
 
             //Добавляем потиковые системы
-            #region PostTick
+            #region Tick
             //Очистка событий
-            startup.PostTickSystem_Add(new S_Events_Clear());
+            startup.TickSystem_Add(
+                System_New<S_Events_Clear>(SystemWeight.EndSystemWeight));
             #endregion
         }
 
