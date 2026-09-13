@@ -13,11 +13,11 @@ namespace GBB.Map
             //Добавляем системы инициализации
             #region Init
             //Создание карт
-            startup.InitSystem_Add(
+            startup.InitSystems_Add(
                 System_New<S_Map_Creation>(SystemWeight.SystemWeight));
 
             //Создаём основные компоненты провинций
-            startup.InitSystem_Add(
+            startup.InitSystems_Add(
                 System_New<S_ProvinceCore_Creation>(SystemWeight.SystemWeight));
             #endregion
 
@@ -28,11 +28,11 @@ namespace GBB.Map
             //Добавляем потиковые системы
             #region Tick
             //Создание карт
-            startup.TickSystem_Add(
+            startup.TickSystems_Add(
                 System_New<S_Map_Creation>(SystemWeight.SystemWeight));
 
             //Создаём основные компоненты провинций
-            startup.TickSystem_Add(
+            startup.TickSystems_Add(
                 System_New<S_ProvinceCore_Creation>(SystemWeight.SystemWeight));
             #endregion
         }

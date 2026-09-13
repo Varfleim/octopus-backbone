@@ -5,6 +5,13 @@ namespace GBB
 {
     public class GameSubmodule : MonoBehaviour
     {
+        public int SubmoduleIndex
+        {
+            get
+            {
+                return submoduleIndex;
+            }
+        }
         private int submoduleIndex;
 
         public void Submodule_Initialization(
@@ -18,16 +25,16 @@ namespace GBB
 
         }
 
-        protected T System_New<T>(
+        public T System_New<T>(
             SystemWeight systemWeight) where T : VFSystem, new()
         {
             T system = new();
 
             system.systemWeight = systemWeight;
-            system.fullName = submoduleIndex + " | " + (int)system.systemWeight + " | " + system.GetType().ToString();
+            system.fullName = SubmoduleIndex + " | " + (int)system.systemWeight + " | " + system.GetType().ToString();
 
             system.systemSubmodule = this;
-            system.systemSubmoduleIndex = submoduleIndex;
+            system.systemSubmoduleIndex = SubmoduleIndex;
 
             return system;
         }

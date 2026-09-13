@@ -14,11 +14,11 @@ namespace GBB
 {
     public enum SystemWeight
     {
-        StartSystemWeight = 100,
-        PreSystemWeight = 200,
-        SystemWeight = 300,
-        PostSystemWeight = 400,
-        EndSystemWeight = 500
+        StartSystemWeight = 1,
+        PreSystemWeight = 2,
+        SystemWeight = 3,
+        PostSystemWeight = 4,
+        EndSystemWeight = 5
     }
 
     [Serializable]
@@ -76,7 +76,7 @@ namespace GBB
     internal class VFSystem_List
     {
         [SerializeField]
-        internal List<VFSystem> systems = new();
+        internal List<VFSystem> systems;
     }
 
     public class GameStartup : MonoBehaviour
@@ -84,20 +84,24 @@ namespace GBB
         ProtoWorld world;
 
         [SerializeField]
-        List<VFSystem_List> initSystemsLists;
+        VFSystem_List[] initSystemsLists;
         IProtoSystems initSystems;
 
         [SerializeField]
-        List<VFSystem_List> frameSystemsLists;
+        VFSystem_List[] frameSystemsLists;
         IProtoSystems frameSystems;
 
         [SerializeField]
-        List<VFSystem_List> renderSystemsLists;
+        VFSystem_List[] renderSystemsLists;
         IProtoSystems renderSystems;
 
         [SerializeField]
-        List<VFSystem_List> tickSystemsLists;
+        VFSystem_List[] tickSystemsLists;
         IProtoSystems tickSystems;
+
+        [SerializeField] 
+        VFSystem_List[] tickRenderSystemsLists;
+        IProtoSystems tickRenderSystems;
 
         A_Core coreAspect;
 
@@ -154,6 +158,9 @@ namespace GBB
             tickSystems = new ProtoSystems(world);
             tickSystems.AddModule(new AutoInjectModule());
 
+            tickRenderSystems = new ProtoSystems(world);
+            tickRenderSystems.AddModule(new AutoInjectModule());
+
             //Инициализируем данные
             RuntimeData runtimeData = coreObject.AddComponent(typeof(RuntimeData)) as RuntimeData;
 
@@ -162,6 +169,13 @@ namespace GBB
 
             //Создаём счётчик подмодулей
             int submodulesCount = 0;
+
+            //Инициализируем списки систем
+            SystemLists_Init(ref initSystemsLists);
+            SystemLists_Init(ref frameSystemsLists);
+            SystemLists_Init(ref renderSystemsLists);
+            SystemLists_Init(ref tickSystemsLists);
+            SystemLists_Init(ref tickRenderSystemsLists);
 
             //Для каждого модуля добавляем системы
             for (int a = 0; a < modules.Length; a++)
@@ -187,6 +201,7 @@ namespace GBB
             frameSystems.Init();
             renderSystems.Init();
             tickSystems.Init();
+            tickRenderSystems.Init();
 
             TimeTickSystem.Create();
 
@@ -196,7 +211,9 @@ namespace GBB
                 {
                     Debug.Log("Tick Start " + DateTime.Now.ToString("hh:mm:ss:fff"));
                     tickSystems?.Run();
-                    Debug.Log("Tick End " + DateTime.Now.ToString("hh:mm:ss:fff"));
+                    Debug.Log("Tick End, Tick Render Start " + DateTime.Now.ToString("hh:mm:ss:fff"));
+                    tickRenderSystems?.Run();
+                    Debug.Log("Tick Render End " + DateTime.Now.ToString("hh:mm:ss:fff"));
                 }
             };
         }
@@ -240,6 +257,12 @@ namespace GBB
                 tickSystems = null;
             }
 
+            if (tickRenderSystems != null)
+            {
+                tickRenderSystems.Destroy();
+                tickRenderSystems = null;
+            }
+
             if (world != null)
             {
                 world.Destroy();
@@ -247,76 +270,118 @@ namespace GBB
             }
         }
 
-        public void ListPools_Init()
+        void ListPools_Init()
         {
 
         }
 
-        void System_Add(
-            IProtoSystems systems,
-            IProtoSystem system, SystemWeight weight)
+        void SystemLists_Init(
+            ref VFSystem_List[] systemLists)
         {
-            systems.AddSystem(
-                system, (int)weight);
-        }
-
-        void System_AddToList(
-            List<VFSystem_List> systemLists,
-            VFSystem system)
-        {
-            systemLists[(int)system.systemWeight / 100 - 1].systems.Add(system);
-        }
-
-        public void InitSystem_Add(
-            VFSystem system)
-        {
-            System_Add(
-                initSystems,
-                system, system.systemWeight);
-            System_AddToList(initSystemsLists, system);
-        }
-
-        public void FrameSystem_Add(
-            VFSystem system)
-        {
-            System_Add(
-                frameSystems,
-                system, system.systemWeight);
-            System_AddToList(frameSystemsLists, system);
-        }
-
-        public void RenderSystem_Add(
-            VFSystem system)
-        {
-            System_Add(
-                renderSystems,
-                system, system.systemWeight);
-            System_AddToList(renderSystemsLists, system);
-        }
-        public void RenderSystem_AddGroup(
-            IConditionalSystemSolver groupSolver,
-            params VFSystem[] groupSystems)
-        {
-            System_Add(
-                renderSystems,
-                new ConditionalSystem(
-                    groupSolver,
-                    true,
-                    groupSystems),
-                groupSystems[0].systemWeight);
-            for (int a = 0; a < groupSystems.Length; a++)
+            systemLists = new VFSystem_List[(int)SystemWeight.EndSystemWeight];
+            for(int a = 0; a < systemLists.Length; a++)
             {
-                System_AddToList(renderSystemsLists, groupSystems[a]);
+                systemLists[a] = new();
+                systemLists[a].systems = new();
             }
         }
 
-        public void TickSystem_Add(
-            VFSystem system)
+        void Systems_Add(
+            IProtoSystems systemsGroup,
+            SystemWeight weight, params IProtoSystem[] systems)
         {
-            System_Add(
+            for (int a = 0; a < systems.Length; a++)
+            {
+                systemsGroup.AddSystem(
+                    systems[a], (int)weight);
+            }
+        }
+
+        void Systems_AddToList(
+            VFSystem_List[] systemLists,
+            params VFSystem[] systems)
+        {
+            for (int a = 0; a < systems.Length; a++)
+            {
+                systemLists[(int)systems[0].systemWeight - 1].systems.Add(systems[a]);
+            }
+        }
+
+        public void InitSystems_Add(
+            params VFSystem[] systems)
+        {
+            Systems_Add(
+                initSystems,
+                systems[0].systemWeight, systems);
+            Systems_AddToList(initSystemsLists, systems);
+        }
+
+        public void FrameSystems_Add(
+            params VFSystem[] systems)
+        {
+            Systems_Add(
+                frameSystems,
+                systems[0].systemWeight, systems);
+            Systems_AddToList(frameSystemsLists, systems);
+        }
+
+        public void RenderSystems_Add(
+            params VFSystem[] systems)
+        {
+            Systems_Add(
+                renderSystems,
+                systems[0].systemWeight, systems);
+            Systems_AddToList(renderSystemsLists, systems);
+        }
+        public void RenderGroupSystem_Add(
+            IConditionalSystemSolver groupSolver,
+            params VFSystem[] groupSystems)
+        {
+            Systems_Add(
+                renderSystems,
+                groupSystems[0].systemWeight,
+                new ConditionalSystem(
+                    groupSolver,
+                    true,
+                    groupSystems));
+            for (int a = 0; a < groupSystems.Length; a++)
+            {
+                Systems_AddToList(renderSystemsLists, groupSystems[a]);
+            }
+        }
+
+        public void TickSystems_Add(
+            params VFSystem[] systems)
+        {
+            Systems_Add(
                 tickSystems,
-                system, system.systemWeight);
-            System_AddToList(tickSystemsLists, system);
+                systems[0].systemWeight, systems);
+            Systems_AddToList(tickSystemsLists, systems);
+        }
+
+        public void TickRenderSystems_Add(
+            params VFSystem[] systems)
+        {
+            Systems_Add(
+                tickRenderSystems,
+                systems[0].systemWeight, systems);
+            Systems_AddToList(tickRenderSystemsLists, systems);
+        }
+        public void TickRenderGroupSystem_Add(
+            IConditionalSystemSolver groupSolver,
+            params VFSystem[] groupSystems)
+        {
+            Systems_Add(
+                tickRenderSystems,
+                groupSystems[0].systemWeight,
+                new ConditionalSystem(
+                    groupSolver,
+                    true,
+                    groupSystems));
+            for (int a = 0; a < groupSystems.Length; a++)
+            {
+                Systems_AddToList(tickRenderSystemsLists, groupSystems[a]);
+            }
         }
 
         public GameObject DataObject_Add()
@@ -340,6 +405,8 @@ namespace GBB
             renderSystems.AddService(inject);
             
             tickSystems.AddService(inject);
+
+            tickRenderSystems.AddService(inject);
         }
     }
 }

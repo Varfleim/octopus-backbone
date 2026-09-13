@@ -15,7 +15,7 @@ namespace GBB.Map.Render
             //Добавляем системы инициализации
             #region Init
             //Создание главных компонентов режимов карты
-            startup.InitSystem_Add(
+            startup.InitSystems_Add(
                 System_New<S_MapModes_CreationMain>(SystemWeight.SystemWeight));
             #endregion
 
@@ -24,19 +24,19 @@ namespace GBB.Map.Render
             //Добавляем системы рендеринга
             #region Render
             //Управление картами
-            startup.RenderSystem_Add(
+            startup.RenderSystems_Add(
                 System_New<S_Map_Control>(SystemWeight.PreSystemWeight));
 
             //Управление режимами карты
-            startup.RenderSystem_Add(
+            startup.RenderSystems_Add(
                 System_New<S_MapMode_Control>(SystemWeight.PreSystemWeight));
 
             //Обновление цветов режимов карты
-            startup.RenderSystem_Add(
+            startup.RenderSystems_Add(
                 System_New<S_MapModes_UpdateColors>(SystemWeight.SystemWeight));
 
             //Непосредственно рендер карты
-            startup.RenderSystem_AddGroup(
+            startup.RenderGroupSystem_Add(
                 //Условие работы
                 new MapRender_Solver(),
                 //Изменение параметров рендера карты

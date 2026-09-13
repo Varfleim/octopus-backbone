@@ -14,32 +14,32 @@ namespace GBB.Core
             //Добавляем системы инициализации
             #region Init
             //Инициализация RNG
-            startup.InitSystem_Add(
+            startup.InitSystems_Add(
                 System_New<S_Random_Test>(SystemWeight.StartSystemWeight));
 
             //Очистка событий
-            startup.InitSystem_Add(
+            startup.InitSystems_Add(
                 System_New<S_Events_Clear>(SystemWeight.EndSystemWeight));
             #endregion
 
             //Добавляем покадровые системы
             #region Frame
             //Очистка событий
-            startup.FrameSystem_Add(
+            startup.FrameSystems_Add(
                 System_New<S_Events_Clear>(SystemWeight.EndSystemWeight));
             #endregion
 
             //Добавляем системы рендеринга
             #region Render
             //Очистка событий
-            startup.RenderSystem_Add(
+            startup.RenderSystems_Add(
                 System_New<S_Events_Clear>(SystemWeight.EndSystemWeight));
             #endregion
 
             //Добавляем потиковые системы
             #region Tick
             //Очистка событий
-            startup.TickSystem_Add(
+            startup.TickSystems_Add(
                 System_New<S_Events_Clear>(SystemWeight.EndSystemWeight));
             #endregion
         }
